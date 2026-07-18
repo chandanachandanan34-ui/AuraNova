@@ -43,7 +43,6 @@ def edit_profile():
         full_name = request.form.get("full_name")
         email = request.form.get("email")
 
-        # Basic validation
         if not full_name or not email:
             flash("All fields are required.", "danger")
             return render_template("patient/edit_profile.html")
@@ -101,3 +100,22 @@ def book_appointment():
         return redirect(url_for("patient.dashboard"))
 
     return render_template("patient/book_appointment.html")
+
+
+@bp.route("/appointments")
+@login_required
+def appointments():
+    """
+    Display all appointments of the logged-in patient.
+    """
+
+    appointments = Appointment.query.filter_by(
+        patient_id=current_user.id
+    ).order_by(
+        Appointment.appointment_date.desc()
+    ).all()
+
+    return render_template(
+        "patient/appointments.html",
+        appointments=appointments
+    )

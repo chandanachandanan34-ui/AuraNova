@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Appointments
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        My Appointments
+    </h2>
+
+    {% if appointments %}
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Doctor</th>
+
+                <th>Date</th>
+
+                <th>Time</th>
+
+                <th>Reason</th>
+
+                <th>Status</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for appointment in appointments %}
+
+            <tr>
+
+                <td>{{ appointment.id }}</td>
+
+                <td>{{ appointment.doctor_name }}</td>
+
+                <td>{{ appointment.appointment_date }}</td>
+
+                <td>{{ appointment.appointment_time }}</td>
+
+                <td>{{ appointment.reason }}</td>
+
+                <td>
+
+                    <span class="badge bg-warning text-dark">
+                        {{ appointment.status }}
+                    </span>
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <div class="alert alert-info">
+            You have not booked any appointments yet.
+        </div>
+
+    {% endif %}
+
+    <a
+        href="{{ url_for('patient.dashboard') }}"
+        class="btn btn-secondary mt-3"
+    >
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+{% endblock %}
