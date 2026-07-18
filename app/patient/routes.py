@@ -4,8 +4,19 @@ Patient portal routes.
 
 from datetime import datetime
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required, current_user
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+)
+
+from flask_login import (
+    login_required,
+    current_user,
+)
 
 from app.extensions import db
 from app.models import Appointment
@@ -16,18 +27,54 @@ bp = Blueprint("patient", __name__)
 @bp.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("patient/dashboard.html")
+    """
+    Display the patient dashboard.
+    """
+
+    total_appointments = Appointment.query.filter_by(
+        patient_id=current_user.id
+    ).count()
+
+    pending_appointments = Appointment.query.filter_by(
+        patient_id=current_user.id,
+        status="Pending"
+    ).count()
+
+    completed_appointments = Appointment.query.filter_by(
+        patient_id=current_user.id,
+        status="Completed"
+    ).count()
+
+    cancelled_appointments = Appointment.query.filter_by(
+        patient_id=current_user.id,
+        status="Cancelled"
+    ).count()
+
+    return render_template(
+        "patient/dashboard.html",
+        total_appointments=total_appointments,
+        pending_appointments=pending_appointments,
+        completed_appointments=completed_appointments,
+        cancelled_appointments=cancelled_appointments,
+    )
 
 
 @bp.route("/profile")
 @login_required
 def profile():
+    """
+    Display patient profile.
+    """
+
     return render_template("patient/profile.html")
 
 
 @bp.route("/edit-profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
+    """
+    Edit patient profile.
+    """
 
     if request.method == "POST":
 
@@ -48,11 +95,12 @@ def edit_profile():
         return redirect(url_for("patient.profile"))
 
     return render_template("patient/edit_profile.html")
-
-
 @bp.route("/book-appointment", methods=["GET", "POST"])
 @login_required
 def book_appointment():
+    """
+    Book a new appointment.
+    """
 
     if request.method == "POST":
 
@@ -61,7 +109,12 @@ def book_appointment():
         appointment_time = request.form.get("appointment_time")
         reason = request.form.get("reason")
 
-        if not doctor_name or not appointment_date or not appointment_time or not reason:
+        if (
+            not doctor_name
+            or not appointment_date
+            or not appointment_time
+            or not reason
+        ):
             flash("Please fill in all fields.", "danger")
             return render_template("patient/book_appointment.html")
 
@@ -77,7 +130,7 @@ def book_appointment():
                 "%H:%M"
             ).time(),
             reason=reason,
-            status="Pending"
+            status="Pending",
         )
 
         db.session.add(appointment)
@@ -93,29 +146,34 @@ def book_appointment():
 @bp.route("/appointments")
 @login_required
 def appointments():
+    """
+    Show all appointments for the logged-in patient.
+    """
 
-    appointments = Appointment.query.filter_by(
-        patient_id=current_user.id
-    ).order_by(
-        Appointment.appointment_date.desc()
-    ).all()
+    appointments = (
+        Appointment.query.filter_by(
+            patient_id=current_user.id
+        )
+        .order_by(Appointment.appointment_date.desc())
+        .all()
+    )
 
     return render_template(
         "patient/appointments.html",
-        appointments=appointments
+        appointments=appointments,
     )
 
 
-@bp.route("/cancel-appointment/<int:id>")
+@bp.route("/cancel-appointment/<int:appointment_id>")
 @login_required
-def cancel_appointment(id):
+def cancel_appointment(appointment_id):
     """
     Cancel an appointment.
     """
 
     appointment = Appointment.query.filter_by(
-        id=id,
-        patient_id=current_user.id
+        id=appointment_id,
+        patient_id=current_user.id,
     ).first()
 
     if appointment is None:
@@ -125,6 +183,6 @@ def cancel_appointment(id):
     db.session.delete(appointment)
     db.session.commit()
 
-    flash("Appointment cancelled successfully.", "success")
+    flash("Appointment cancelled successfully!", "success")
 
     return redirect(url_for("patient.appointments"))
