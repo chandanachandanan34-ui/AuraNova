@@ -32,6 +32,8 @@ My Appointments
 
                 <th>Status</th>
 
+                <th>Action</th>
+
             </tr>
 
         </thead>
@@ -58,6 +60,16 @@ My Appointments
                         {{ appointment.status }}
                     </span>
 
+                </td>
+
+                <td>
+                    <a
+                        href="{{ url_for('patient.cancel_appointment', id=appointment.id) }}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Are you sure you want to cancel this appointment?')"
+                    >
+                        Cancel
+                    </a>
                 </td>
 
             </tr>

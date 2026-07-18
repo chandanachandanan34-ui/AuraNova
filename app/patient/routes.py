@@ -16,27 +16,18 @@ bp = Blueprint("patient", __name__)
 @bp.route("/dashboard")
 @login_required
 def dashboard():
-    """
-    Display the patient dashboard.
-    """
     return render_template("patient/dashboard.html")
 
 
 @bp.route("/profile")
 @login_required
 def profile():
-    """
-    Display the patient's profile.
-    """
     return render_template("patient/profile.html")
 
 
 @bp.route("/edit-profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
-    """
-    Edit the logged-in user's profile.
-    """
 
     if request.method == "POST":
 
@@ -62,9 +53,6 @@ def edit_profile():
 @bp.route("/book-appointment", methods=["GET", "POST"])
 @login_required
 def book_appointment():
-    """
-    Book a new appointment.
-    """
 
     if request.method == "POST":
 
@@ -105,9 +93,6 @@ def book_appointment():
 @bp.route("/appointments")
 @login_required
 def appointments():
-    """
-    Display all appointments of the logged-in patient.
-    """
 
     appointments = Appointment.query.filter_by(
         patient_id=current_user.id
@@ -119,3 +104,27 @@ def appointments():
         "patient/appointments.html",
         appointments=appointments
     )
+
+
+@bp.route("/cancel-appointment/<int:id>")
+@login_required
+def cancel_appointment(id):
+    """
+    Cancel an appointment.
+    """
+
+    appointment = Appointment.query.filter_by(
+        id=id,
+        patient_id=current_user.id
+    ).first()
+
+    if appointment is None:
+        flash("Appointment not found.", "danger")
+        return redirect(url_for("patient.appointments"))
+
+    db.session.delete(appointment)
+    db.session.commit()
+
+    flash("Appointment cancelled successfully.", "success")
+
+    return redirect(url_for("patient.appointments"))
