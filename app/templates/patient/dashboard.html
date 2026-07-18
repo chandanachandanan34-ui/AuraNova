@@ -41,7 +41,7 @@ Patient Dashboard
 
                     <p>
                         <strong>Joined:</strong>
-                        {{ current_user.created_at }}
+                        {{ current_user.created_at.strftime("%d %B %Y") }}
                     </p>
 
                     <a
@@ -67,23 +67,26 @@ Patient Dashboard
 
                 <div class="card-body d-grid gap-2">
 
-                    <button class="btn btn-primary">
-                        Book Appointment
-                    </button>
+                    <a
+                        href="{{ url_for('patient.book_appointment') }}"
+                        class="btn btn-primary"
+                    >
+                        📅 Book Appointment
+                    </a>
 
                     <button class="btn btn-info">
-                        Medical Records
+                        📋 Medical Records
                     </button>
 
                     <button class="btn btn-warning">
-                        AI Health Assistant
+                        🤖 AI Health Assistant
                     </button>
 
                     <a
                         href="{{ url_for('auth.logout') }}"
                         class="btn btn-danger"
                     >
-                        Logout
+                        🚪 Logout
                     </a>
 
                 </div>
