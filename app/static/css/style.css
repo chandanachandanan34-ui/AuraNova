@@ -19,3 +19,36 @@ main {
 .display-3 {
     letter-spacing: -0.02em;
 }
+/* Home Page Cards */
+
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card h1 {
+    font-size: 55px;
+}
+
+.btn-primary {
+    border-radius: 10px;
+}
+
+.btn-outline-primary {
+    border-radius: 10px;
+}
+
+.display-4 {
+    font-weight: bold;
+}
+
+section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

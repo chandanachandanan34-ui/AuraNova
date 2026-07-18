@@ -32,7 +32,7 @@
         <div class="container">
 
             <a class="navbar-brand fw-bold"
-            href="{{ url_for('auth.auth_home') }}">
+               href="{{ url_for('index') }}">
 
                 🩺 AuraNova
 
@@ -55,63 +55,95 @@
                 <ul class="navbar-nav ms-auto">
 
                     <li class="nav-item">
+
                         <a class="nav-link"
-                            href="{{ url_for('auth.auth_home') }}">
+                           href="{{ url_for('index') }}">
+
                             Home
+
                         </a>
+
                     </li>
 
                     {% if current_user.is_authenticated %}
 
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url_for('patient.dashboard') }}">
+
                             Dashboard
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url_for('patient.book_appointment') }}">
+
                             Book Appointment
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url_for('patient.appointments') }}">
+
                             My Appointments
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url_for('patient.profile') }}">
+
                             Profile
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link text-warning"
                            href="{{ url_for('auth.logout') }}">
+
                             Logout
+
                         </a>
+
                     </li>
 
                     {% else %}
 
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url_for('auth.login') }}">
+
                             Login
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url_for('auth.register') }}">
+
                             Register
+
                         </a>
+
                     </li>
 
                     {% endif %}

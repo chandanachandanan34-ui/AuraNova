@@ -6,144 +6,283 @@ AuraNova
 
 {% block content %}
 
-<!-- Hero Section -->
+<!-- HERO -->
 
 <section class="py-5">
 
-    <div class="row align-items-center">
+<div class="row align-items-center">
 
-        <div class="col-lg-6">
+<div class="col-lg-6">
 
-            <h1 class="display-4 fw-bold text-primary">
+<h1 class="display-3 fw-bold text-primary">
 
-                Smart Healthcare
-                <br>
-                Made Simple
+Smart Healthcare
+<br>
+Made Simple
 
-            </h1>
+</h1>
 
-            <p class="lead mt-4">
+<p class="lead mt-4">
 
-                AuraNova helps patients book appointments,
-                manage health records,
-                and connect with doctors securely.
+AuraNova is your trusted digital healthcare platform.
 
-            </p>
+Book appointments, manage medical records,
+consult experienced doctors,
+and experience healthcare from anywhere.
 
-            {% if current_user.is_authenticated %}
+</p>
 
-            <a
-                href="{{ url_for('patient.dashboard') }}"
-                class="btn btn-primary btn-lg mt-3">
+<div class="mt-4">
 
-                Go to Dashboard
+{% if current_user.is_authenticated %}
 
-            </a>
+<a href="{{ url_for('patient.dashboard') }}"
+class="btn btn-primary btn-lg">
 
-            {% else %}
+Dashboard
 
-            <a
-                href="{{ url_for('auth.register') }}"
-                class="btn btn-primary btn-lg mt-3">
+</a>
 
-                Get Started
+{% else %}
 
-            </a>
+<a href="{{ url_for('auth.register') }}"
+class="btn btn-primary btn-lg me-2">
 
-            <a
-                href="{{ url_for('auth.login') }}"
-                class="btn btn-outline-primary btn-lg mt-3">
+Get Started
 
-                Login
+</a>
 
-            </a>
+<a href="{{ url_for('auth.login') }}"
+class="btn btn-outline-primary btn-lg">
 
-            {% endif %}
+Login
 
-        </div>
+</a>
 
-        <div class="col-lg-6 text-center">
+{% endif %}
 
-            <img
-                src="https://cdn-icons-png.flaticon.com/512/2966/2966480.png"
-                class="img-fluid"
-                style="max-width:400px;">
+</div>
 
-        </div>
+</div>
 
-    </div>
+<div class="col-lg-6 text-center">
+
+<img
+src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png"
+class="img-fluid"
+style="max-width:430px;">
+
+</div>
+
+</div>
 
 </section>
 
-<hr class="my-5">
+<!-- TRUST -->
 
-<!-- Features -->
+<div class="text-center py-4">
 
-<section>
+<h4 class="text-warning">
 
-    <h2 class="text-center mb-5">
+★★★★★
 
-        Why Choose AuraNova?
+</h4>
 
-    </h2>
+<p class="lead">
 
-    <div class="row">
+Trusted by patients for secure and reliable healthcare.
 
-        <div class="col-md-4">
+</p>
 
-            <div class="card shadow text-center p-4 h-100">
+</div>
 
-                <h3>📅</h3>
+<hr>
 
-                <h4>Easy Appointment Booking</h4>
+<!-- FEATURES -->
 
-                <p>
+<section class="py-5">
 
-                    Book doctor appointments in just a few clicks.
+<h2 class="text-center mb-5">
 
-                </p>
+Why Choose AuraNova?
 
-            </div>
+</h2>
 
-        </div>
+<div class="row g-4">
 
-        <div class="col-md-4">
+<div class="col-md-3">
 
-            <div class="card shadow text-center p-4 h-100">
+<div class="card shadow border-0 h-100 text-center p-4">
 
-                <h3>🩺</h3>
+<h1>📅</h1>
 
-                <h4>Qualified Doctors</h4>
+<h4>
 
-                <p>
+Easy Booking
 
-                    Consult experienced specialists across multiple departments.
+</h4>
 
-                </p>
+<p>
 
-            </div>
+Schedule appointments in seconds.
 
-        </div>
+</p>
 
-        <div class="col-md-4">
+</div>
 
-            <div class="card shadow text-center p-4 h-100">
+</div>
 
-                <h3>🔒</h3>
+<div class="col-md-3">
 
-                <h4>Secure Records</h4>
+<div class="card shadow border-0 h-100 text-center p-4">
 
-                <p>
+<h1>🩺</h1>
 
-                    Your medical information stays safe and confidential.
+<h4>
 
-                </p>
+Expert Doctors
 
-            </div>
+</h4>
 
-        </div>
+<p>
 
-    </div>
+Consult experienced specialists.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="card shadow border-0 h-100 text-center p-4">
+
+<h1>🔒</h1>
+
+<h4>
+
+Secure Records
+
+</h4>
+
+<p>
+
+Your medical history stays protected.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="card shadow border-0 h-100 text-center p-4">
+
+<h1>⚡</h1>
+
+<h4>
+
+Fast Service
+
+</h4>
+
+<p>
+
+Simple and quick healthcare access.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<hr>
+
+<!-- SERVICES -->
+
+<section class="py-5">
+
+<h2 class="text-center mb-5">
+
+Our Services
+
+</h2>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+
+<div class="card shadow border-0 h-100 text-center p-4">
+
+<h1>🩺</h1>
+
+<h4>
+
+Doctor Consultation
+
+</h4>
+
+<p>
+
+Book appointments with specialists.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card shadow border-0 h-100 text-center p-4">
+
+<h1>💊</h1>
+
+<h4>
+
+Digital Prescriptions
+
+</h4>
+
+<p>
+
+Manage prescriptions online.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card shadow border-0 h-100 text-center p-4">
+
+<h1>📋</h1>
+
+<h4>
+
+Medical Records
+
+</h4>
+
+<p>
+
+Access records anytime.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 

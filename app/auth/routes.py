@@ -28,12 +28,6 @@ from app.models import User
 bp = Blueprint("auth", __name__)
 
 
-@bp.route("/")
-def auth_home():
-    """
-    Test route for authentication blueprint.
-    """
-    return "Auth Blueprint Working"
 
 
 @bp.route("/register", methods=["GET", "POST"])

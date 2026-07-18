@@ -9,7 +9,6 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask, render_template
-from flask_login import login_required
 
 from app.config import config
 from app.extensions import db, login_manager, migrate
@@ -27,7 +26,12 @@ def create_app(config_name=None):
     if config_name is None:
         config_name = os.environ.get("FLASK_ENV", "development")
 
-    app.config.from_object(config.get(config_name, config["default"]))
+    app.config.from_object(
+        config.get(
+            config_name,
+            config["default"]
+        )
+    )
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -49,6 +53,9 @@ def create_app(config_name=None):
 
 
 def _register_blueprints(app):
+    """
+    Register all blueprints.
+    """
 
     from app.admin.routes import bp as admin_bp
     from app.ai.routes import bp as ai_bp
@@ -56,14 +63,36 @@ def _register_blueprints(app):
     from app.doctor.routes import bp as doctor_bp
     from app.patient.routes import bp as patient_bp
 
-    app.register_blueprint(auth_bp, url_prefix="/auth")
-    app.register_blueprint(admin_bp, url_prefix="/admin")
-    app.register_blueprint(doctor_bp, url_prefix="/doctor")
-    app.register_blueprint(patient_bp, url_prefix="/patient")
-    app.register_blueprint(ai_bp, url_prefix="/ai")
+    app.register_blueprint(
+        auth_bp,
+        url_prefix="/auth"
+    )
+
+    app.register_blueprint(
+        admin_bp,
+        url_prefix="/admin"
+    )
+
+    app.register_blueprint(
+        doctor_bp,
+        url_prefix="/doctor"
+    )
+
+    app.register_blueprint(
+        patient_bp,
+        url_prefix="/patient"
+    )
+
+    app.register_blueprint(
+        ai_bp,
+        url_prefix="/ai"
+    )
 
 
 def _register_core_routes(app):
+    """
+    Register common application routes.
+    """
 
     @app.context_processor
     def inject_globals():
@@ -74,6 +103,8 @@ def _register_core_routes(app):
         }
 
     @app.route("/")
-    @login_required
     def index():
+        """
+        Landing page.
+        """
         return render_template("index.html")
