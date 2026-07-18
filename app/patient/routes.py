@@ -28,27 +28,35 @@ bp = Blueprint("patient", __name__)
 @login_required
 def dashboard():
     """
-    Display the patient dashboard.
+   Display the patient dashboard.
     """
 
-    total_appointments = Appointment.query.filter_by(
-        patient_id=current_user.id
-    ).count()
+    appointments = (
+        Appointment.query.filter_by(
+            patient_id=current_user.id
+        )
+        .order_by(Appointment.appointment_date.desc())
+        .all()
+    )
 
-    pending_appointments = Appointment.query.filter_by(
-        patient_id=current_user.id,
-        status="Pending"
-    ).count()
+    total_appointments = len(appointments)
 
-    completed_appointments = Appointment.query.filter_by(
-        patient_id=current_user.id,
-        status="Completed"
-    ).count()
+    pending_appointments = sum(
+        1 for appointment in appointments
+        if appointment.status == "Pending"
+    )
 
-    cancelled_appointments = Appointment.query.filter_by(
-        patient_id=current_user.id,
-        status="Cancelled"
-    ).count()
+    completed_appointments = sum(
+        1 for appointment in appointments
+        if appointment.status == "Completed"
+    )
+
+    cancelled_appointments = sum(
+        1 for appointment in appointments
+        if appointment.status == "Cancelled"
+    )
+
+    recent_appointments = appointments[:5]
 
     return render_template(
         "patient/dashboard.html",
@@ -56,9 +64,8 @@ def dashboard():
         pending_appointments=pending_appointments,
         completed_appointments=completed_appointments,
         cancelled_appointments=cancelled_appointments,
+        recent_appointments=recent_appointments,
     )
-
-
 @bp.route("/profile")
 @login_required
 def profile():
