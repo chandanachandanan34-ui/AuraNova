@@ -6,135 +6,37 @@ Patient Dashboard
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-5">
 
     <h2 class="mb-4">
-        Welcome, {{ current_user.full_name }} 👋
+        Patient Dashboard
     </h2>
 
-    <div class="row">
+    <div class="card shadow">
 
-        <div class="col-md-3 mb-3">
-            <div class="card text-center border-primary shadow">
-                <div class="card-body">
-                    <h5>Total</h5>
-                    <h2>{{ total_appointments }}</h2>
-                </div>
-            </div>
+        <div class="card-body">
+
+            <h3>
+                Welcome, {{ user.full_name }}
+            </h3>
+
+            <hr>
+
+            <p>
+                <strong>Email:</strong>
+                {{ user.email }}
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                {{ user.role }}
+            </p>
+
+            <p class="text-success">
+                You are logged in successfully.
+            </p>
+
         </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card text-center border-warning shadow">
-                <div class="card-body">
-                    <h5>Pending</h5>
-                    <h2>{{ pending_appointments }}</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card text-center border-success shadow">
-                <div class="card-body">
-                    <h5>Completed</h5>
-                    <h2>{{ completed_appointments }}</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card text-center border-danger shadow">
-                <div class="card-body">
-                    <h5>Cancelled</h5>
-                    <h2>{{ cancelled_appointments }}</h2>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <hr class="my-4">
-
-    <h4>Recent Appointments</h4>
-
-    {% if recent_appointments %}
-
-    <table class="table table-bordered table-hover mt-3">
-
-        <thead class="table-dark">
-
-            <tr>
-                <th>Doctor</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-        {% for appointment in recent_appointments %}
-
-            <tr>
-
-                <td>{{ appointment.doctor_name }}</td>
-
-                <td>{{ appointment.appointment_date }}</td>
-
-                <td>{{ appointment.appointment_time }}</td>
-
-                <td>
-
-                    {% if appointment.status == "Pending" %}
-                        <span class="badge bg-warning text-dark">
-                            {{ appointment.status }}
-                        </span>
-
-                    {% elif appointment.status == "Completed" %}
-                        <span class="badge bg-success">
-                            {{ appointment.status }}
-                        </span>
-
-                    {% else %}
-                        <span class="badge bg-danger">
-                            {{ appointment.status }}
-                        </span>
-                    {% endif %}
-
-                </td>
-
-            </tr>
-
-        {% endfor %}
-
-        </tbody>
-
-    </table>
-
-    {% else %}
-
-        <div class="alert alert-info mt-3">
-            No appointments found.
-        </div>
-
-    {% endif %}
-
-    <div class="mt-4">
-
-        <a href="{{ url_for('patient.book_appointment') }}"
-           class="btn btn-primary">
-            Book Appointment
-        </a>
-
-        <a href="{{ url_for('patient.appointments') }}"
-           class="btn btn-success">
-            My Appointments
-        </a>
-
-        <a href="{{ url_for('patient.profile') }}"
-           class="btn btn-secondary">
-            Profile
-        </a>
 
     </div>
 

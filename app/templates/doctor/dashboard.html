@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        Doctor Dashboard
+    </h2>
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h3>{{ doctor.full_name }}</h3>
+
+            <hr>
+
+            <p>
+                <strong>Email:</strong>
+                {{ doctor.email }}
+            </p>
+
+            <p>
+                <strong>Specialization:</strong>
+                {{ doctor.specialization }}
+            </p>
+
+            <p>
+                <strong>Qualification:</strong>
+                {{ doctor.qualification }}
+            </p>
+
+            <p>
+                <strong>Experience:</strong>
+                {{ doctor.experience }} Years
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ doctor.phone }}
+            </p>
+
+            <p>
+                <strong>Available:</strong>
+
+                {% if doctor.available %}
+                    ✅ Yes
+                {% else %}
+                    ❌ No
+                {% endif %}
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

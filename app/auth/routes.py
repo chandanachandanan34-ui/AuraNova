@@ -23,11 +23,9 @@ from werkzeug.security import (
 )
 
 from app.extensions import db
-from app.models import User
+from app.models import User, Doctor
 
 bp = Blueprint("auth", __name__)
-
-
 
 
 @bp.route("/register", methods=["GET", "POST"])
@@ -42,18 +40,19 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
+        role = request.form.get("role")
 
         # Check empty fields
         if not full_name or not email or not password or not confirm_password:
             flash("Please fill in all fields.", "danger")
             return render_template("auth/register.html")
 
-        # Password match
+        # Check password match
         if password != confirm_password:
             flash("Passwords do not match.", "danger")
             return render_template("auth/register.html")
 
-        # Email already exists
+        # Check existing email
         existing_user = User.query.filter_by(email=email).first()
 
         if existing_user:
@@ -68,12 +67,27 @@ def register():
             full_name=full_name,
             email=email,
             password=hashed_password,
-            role="patient",
+            role=role,
         )
 
-        # Save user
         db.session.add(new_user)
         db.session.commit()
+
+        # Create doctor profile if selected
+        if role == "doctor":
+
+            doctor = Doctor(
+                user_id=new_user.id,
+                full_name=full_name,
+                specialization="General",
+                qualification="Not Added",
+                experience=0,
+                email=email,
+                phone="Not Added",
+            )
+
+            db.session.add(doctor)
+            db.session.commit()
 
         flash("Registration successful! Please login.", "success")
 
@@ -93,23 +107,26 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # Find user
         user = User.query.filter_by(email=email).first()
 
-        # Invalid email
         if user is None:
             flash("Invalid email or password.", "danger")
             return render_template("auth/login.html")
 
-        # Check password
         if not check_password_hash(user.password, password):
             flash("Invalid email or password.", "danger")
             return render_template("auth/login.html")
 
-        # Login user
         login_user(user)
 
         flash("Login successful!", "success")
+
+        # Redirect based on role
+        if user.role == "doctor":
+            return redirect(url_for("doctor.dashboard"))
+
+        elif user.role == "admin":
+            return redirect(url_for("admin.dashboard"))
 
         return redirect(url_for("patient.dashboard"))
 

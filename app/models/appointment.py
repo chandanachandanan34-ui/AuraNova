@@ -1,23 +1,12 @@
-"""
-Appointment database model.
-"""
-
 from datetime import datetime
 
 from app.extensions import db
 
 
 class Appointment(db.Model):
-    """
-    Appointment model.
-    """
-
     __tablename__ = "appointments"
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    id = db.Column(db.Integer, primary_key=True)
 
     patient_id = db.Column(
         db.Integer,
@@ -25,8 +14,9 @@ class Appointment(db.Model):
         nullable=False
     )
 
-    doctor_name = db.Column(
-        db.String(100),
+    doctor_id = db.Column(
+        db.Integer,
+        db.ForeignKey("doctors.id"),
         nullable=False
     )
 
@@ -53,4 +43,14 @@ class Appointment(db.Model):
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
+    )
+
+    patient = db.relationship(
+        "User",
+        backref="appointments"
+    )
+
+    doctor = db.relationship(
+        "Doctor",
+        backref="appointments"
     )
