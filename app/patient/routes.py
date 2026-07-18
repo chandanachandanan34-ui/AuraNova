@@ -19,7 +19,7 @@ from flask_login import (
 )
 
 from app.extensions import db
-from app.models import Appointment
+from app.models import Appointment, Doctor
 
 bp = Blueprint("patient", __name__)
 
@@ -102,6 +102,7 @@ def edit_profile():
         return redirect(url_for("patient.profile"))
 
     return render_template("patient/edit_profile.html")
+
 @bp.route("/book-appointment", methods=["GET", "POST"])
 @login_required
 def book_appointment():
@@ -109,12 +110,19 @@ def book_appointment():
     Book a new appointment.
     """
 
-    if request.method == "POST":
+    # Fetch all available doctors
+    doctors = Doctor.query.filter_by(
+        available=True
+    ).all()
 
+    if request.method == "POST":
+        
         doctor_name = request.form.get("doctor_name")
         appointment_date = request.form.get("appointment_date")
         appointment_time = request.form.get("appointment_time")
         reason = request.form.get("reason")
+
+       
 
         if (
             not doctor_name
@@ -123,7 +131,11 @@ def book_appointment():
             or not reason
         ):
             flash("Please fill in all fields.", "danger")
-            return render_template("patient/book_appointment.html")
+
+            return render_template(
+                "patient/book_appointment.html",
+                doctors=doctors
+            )
 
         appointment = Appointment(
             patient_id=current_user.id,
@@ -147,8 +159,10 @@ def book_appointment():
 
         return redirect(url_for("patient.dashboard"))
 
-    return render_template("patient/book_appointment.html")
-
+    return render_template(
+        "patient/book_appointment.html",
+        doctors=doctors
+    )
 
 @bp.route("/appointments")
 @login_required

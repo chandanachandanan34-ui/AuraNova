@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Book Appointment{% endblock %}
+{% block title %}
+Book Appointment
+{% endblock %}
 
 {% block content %}
 
@@ -17,19 +19,43 @@
             <form method="POST">
 
                 <div class="mb-3">
-                    <label class="form-label">Doctor Name</label>
 
-                    <input
-                        type="text"
+                    <label class="form-label">
+                        Select Doctor
+                    </label>
+
+                    <select
                         name="doctor_name"
-                        class="form-control"
-                        placeholder="Enter doctor's name"
+                        class="form-select"
                         required
                     >
+
+                        <option value="">
+                            -- Choose a Doctor --
+                        </option>
+
+                        {% for doctor in doctors %}
+
+                        <option value="{{ doctor.full_name }}">
+
+                            {{ doctor.full_name }}
+                            -
+                            {{ doctor.specialization }}
+                            ({{ doctor.experience }} Years)
+                        
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Appointment Date</label>
+
+                    <label class="form-label">
+                        Appointment Date
+                    </label>
 
                     <input
                         type="date"
@@ -37,10 +63,14 @@
                         class="form-control"
                         required
                     >
+
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Appointment Time</label>
+
+                    <label class="form-label">
+                        Appointment Time
+                    </label>
 
                     <input
                         type="time"
@@ -48,6 +78,7 @@
                         class="form-control"
                         required
                     >
+
                 </div>
 
                 <div class="mb-3">
@@ -67,11 +98,10 @@
                 </div>
 
                 <button
+                    type="submit"
                     class="btn btn-success"
-                    type="submit">
-
+                >
                     Book Appointment
-
                 </button>
 
             </form>
