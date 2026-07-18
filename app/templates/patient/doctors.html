@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+Available Doctors
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        Available Doctors
+    </h2>
+
+
+    <div class="row">
+
+        {% for doctor in doctors %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Dr. {{ doctor.user.username }}
+                    </h5>
+
+
+                    <p>
+                        <strong>Specialization:</strong>
+                        {{ doctor.specialization }}
+                    </p>
+
+
+                    <p>
+                        <strong>Qualification:</strong>
+                        {{ doctor.qualification }}
+                    </p>
+
+
+                    <p>
+                        <strong>Experience:</strong>
+                        {{ doctor.experience }} years
+                    </p>
+
+
+                    <a href="{{ url_for('patient.book_appointment', doctor_id=doctor.id) }}"
+   class="btn btn-primary">
+
+    Book Appointment
+
+</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

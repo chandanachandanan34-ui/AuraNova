@@ -1,102 +1,174 @@
 {% extends "base.html" %}
 
+
 {% block title %}
 My Appointments
 {% endblock %}
 
+
+
 {% block content %}
 
-<div class="container mt-5">
 
-    <h2 class="mb-4">
-        My Appointments
-    </h2>
+<div class="container mt-4">
 
-    {% if appointments %}
 
-    <table class="table table-bordered table-hover">
+<h2>
+My Appointments
+</h2>
 
-        <thead class="table-dark">
 
-            <tr>
 
-                <th>ID</th>
+{% if appointments %}
 
-                <th>Doctor</th>
 
-                <th>Date</th>
+<table class="table table-bordered shadow">
 
-                <th>Time</th>
 
-                <th>Reason</th>
+<thead class="table-primary">
 
-                <th>Status</th>
+<tr>
 
-                <th>Action</th>
+<th>
+Doctor
+</th>
 
-            </tr>
+<th>
+Specialization
+</th>
 
-        </thead>
+<th>
+Date
+</th>
 
-        <tbody>
+<th>
+Time
+</th>
 
-        {% for appointment in appointments %}
+<th>
+Reason
+</th>
 
-            <tr>
+<th>
+Status
+</th>
 
-                <td>{{ appointment.id }}</td>
+<th>
+Action
+</th>
 
-                <td>{{ appointment.doctor_name }}</td>
+</tr>
 
-                <td>{{ appointment.appointment_date }}</td>
 
-                <td>{{ appointment.appointment_time }}</td>
+</thead>
 
-                <td>{{ appointment.reason }}</td>
 
-                <td>
 
-                    <span class="badge bg-warning text-dark">
-                        {{ appointment.status }}
-                    </span>
+<tbody>
 
-                </td>
 
-                <td>
+{% for appointment in appointments %}
 
-                    <a
-                        href="{{ url_for('patient.cancel_appointment', appointment_id=appointment.id) }}"
-                        class="btn btn-danger btn-sm"
-                        onclick="return confirm('Are you sure you want to cancel this appointment?')"
-                    >
-                        Cancel
-                    </a>
 
-                </td>
+<tr>
 
-            </tr>
 
-        {% endfor %}
+<td>
 
-        </tbody>
+{{ appointment.doctor.full_name }}
 
-    </table>
+</td>
 
-    {% else %}
 
-        <div class="alert alert-info">
-            You have not booked any appointments yet.
-        </div>
+<td>
 
-    {% endif %}
+{{ appointment.doctor.specialization }}
 
-    <a
-        href="{{ url_for('patient.dashboard') }}"
-        class="btn btn-secondary mt-3"
-    >
-        ← Back to Dashboard
-    </a>
+</td>
+
+
+<td>
+
+{{ appointment.appointment_date }}
+
+</td>
+
+
+<td>
+
+{{ appointment.appointment_time }}
+
+</td>
+
+
+<td>
+
+{{ appointment.reason }}
+
+</td>
+
+
+<td>
+
+{{ appointment.status }}
+
+</td>
+
+
+<td>
+
+
+{% if appointment.status != "Cancelled" %}
+
+<a
+href="{{ url_for(
+'patient.cancel_appointment',
+id=appointment.id
+) }}"
+class="btn btn-danger btn-sm">
+
+Cancel
+
+</a>
+
+{% else %}
+
+Cancelled
+
+{% endif %}
+
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+
+{% else %}
+
+
+<div class="alert alert-info">
+
+No appointments booked yet.
 
 </div>
+
+
+{% endif %}
+
+
+
+</div>
+
 
 {% endblock %}

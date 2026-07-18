@@ -52,3 +52,8 @@ section {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+.nav-link {
+    color: black;
+    font-weight: 500;
+}

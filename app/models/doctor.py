@@ -8,9 +8,6 @@ from app.extensions import db
 
 
 class Doctor(db.Model):
-    """
-    Doctor information.
-    """
 
     __tablename__ = "doctors"
 
@@ -22,10 +19,10 @@ class Doctor(db.Model):
 
 
     user_id = db.Column(
-    db.Integer,
-    db.ForeignKey("users.id"),
-    nullable=True
-)
+        db.Integer,
+        db.ForeignKey("users.id"),
+        nullable=True
+    )
 
 
     full_name = db.Column(
@@ -80,6 +77,14 @@ class Doctor(db.Model):
     user = db.relationship(
         "User",
         backref="doctor_profile"
+    )
+
+
+    appointments = db.relationship(
+        "Appointment",
+        back_populates="doctor",
+        lazy=True,
+        cascade="all, delete-orphan"
     )
 
 
