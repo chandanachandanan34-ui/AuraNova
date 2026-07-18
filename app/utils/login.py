@@ -1,13 +1,15 @@
 """
-Flask-Login user loader placeholder.
-
-Will be implemented when authentication models are added.
+Flask-Login user loader.
 """
 
 from app.extensions import login_manager
+from app.models import User
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    """Load a user by ID. Returns None until auth models are implemented."""
-    return None
+    """
+    Load a user from the database by ID.
+    """
+
+    return User.query.get(int(user_id))

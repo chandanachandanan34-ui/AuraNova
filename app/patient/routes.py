@@ -1,11 +1,18 @@
 """
 Patient portal routes.
-
-Patient-facing features will be implemented in a future phase.
 """
 
-from flask import Blueprint
+from flask import Blueprint, render_template
+from flask_login import login_required
 
 bp = Blueprint("patient", __name__)
 
-# Patient routes will be registered here.
+
+@bp.route("/dashboard")
+@login_required
+def dashboard():
+    """
+    Display the patient dashboard.
+    """
+
+    return render_template("patient/dashboard.html")
