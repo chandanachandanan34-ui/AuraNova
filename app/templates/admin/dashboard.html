@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        Admin Dashboard
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-primary">
+
+                <div class="card-body text-center">
+
+                    <h1>{{ total_doctors }}</h1>
+
+                    <h5>Total Doctors</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-success">
+
+                <div class="card-body text-center">
+
+                    <h1>{{ total_patients }}</h1>
+
+                    <h5>Total Patients</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-warning">
+
+                <div class="card-body text-center">
+
+                    <h1>{{ total_appointments }}</h1>
+
+                    <h5>Total Appointments</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr class="my-5">
+
+    <div class="d-grid gap-3">
+
+    <a
+    href="{{ url_for('admin.add_doctor') }}"
+    class="btn btn-primary btn-lg">
+
+    Add Doctor
+
+    </a>
+
+    <a
+        href="{{ url_for('admin.view_doctors') }}"
+        class="btn btn-success btn-lg">
+
+        View Doctors
+
+    </a>
+
+    <a
+    href="{{ url_for('admin.manage_appointments') }}"
+    class="btn btn-warning btn-lg">
+
+    Manage Appointments
+
+</a>
+
+    </div>
+
+</div>
+
+{% endblock %}

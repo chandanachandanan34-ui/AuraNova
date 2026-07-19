@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+Doctor Appointments
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        My Appointments
+    </h2>
+
+    <table class="table table-bordered table-hover shadow">
+
+        <thead class="table-primary">
+
+            <tr>
+
+                <th>ID</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for appointment in appointments %}
+
+            <tr>
+
+                <td>{{ appointment.id }}</td>
+
+                <td>{{ appointment.patient.full_name }}</td>
+
+                <td>{{ appointment.appointment_date }}</td>
+
+                <td>{{ appointment.appointment_time }}</td>
+
+                <td>
+
+                    {% if appointment.status == "Pending" %}
+
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+
+                    {% elif appointment.status == "Confirmed" %}
+
+                        <span class="badge bg-success">
+                            Confirmed
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+                            Rejected
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if appointment.status == "Pending" %}
+
+                    <a
+                        href="{{ url_for('doctor.confirm_appointment', id=appointment.id) }}"
+                        class="btn btn-success btn-sm">
+
+                        Confirm
+
+                    </a>
+
+                    <a
+                        href="{{ url_for('doctor.reject_appointment', id=appointment.id) }}"
+                        class="btn btn-danger btn-sm">
+
+                        Reject
+
+                    </a>
+
+                    {% else %}
+
+                    <span class="text-muted">
+                        Completed
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

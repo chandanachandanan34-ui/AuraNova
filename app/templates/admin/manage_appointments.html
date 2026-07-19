@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Appointments
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        Manage Appointments
+    </h2>
+
+    <table class="table table-bordered table-hover shadow">
+
+        <thead class="table-primary">
+
+            <tr>
+
+                <th>ID</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for appointment in appointments %}
+
+            <tr>
+
+                <td>{{ appointment.id }}</td>
+
+                <td>{{ appointment.patient.full_name }}</td>
+
+                <td>{{ appointment.doctor.full_name }}</td>
+
+                <td>{{ appointment.appointment_date }}</td>
+
+                <td>{{ appointment.appointment_time }}</td>
+
+                <td>{{ appointment.status }}</td>
+
+                <td>
+
+                    {% if appointment.status == "Pending" %}
+                
+                        <a
+                            href="{{ url_for('admin.approve_appointment', id=appointment.id) }}"
+                            class="btn btn-success btn-sm">
+                
+                            Approve
+                
+                        </a>
+                
+                        <a
+                            href="{{ url_for('admin.reject_appointment', id=appointment.id) }}"
+                            class="btn btn-danger btn-sm">
+                
+                            Reject
+                
+                        </a>
+                
+                    {% else %}
+                
+                        -
+                
+                    {% endif %}
+                
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

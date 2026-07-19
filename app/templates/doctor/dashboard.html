@@ -1,62 +1,335 @@
 {% extends "base.html" %}
 
-{% block title %}Doctor Dashboard{% endblock %}
+{% block title %}
+Doctor Dashboard
+{% endblock %}
+
 
 {% block content %}
 
+
 <div class="container mt-5">
 
+
     <h2 class="mb-4">
-        Doctor Dashboard
+        👨‍⚕️ Doctor Dashboard
     </h2>
 
-    <div class="card shadow">
+
+
+    <!-- Doctor Welcome Card -->
+
+    <div class="card shadow mb-4">
 
         <div class="card-body">
 
-            <h3>{{ doctor.full_name }}</h3>
+            <h3>
+                Welcome Dr. {{ doctor.full_name }}
+            </h3>
 
-            <hr>
-
-            <p>
-                <strong>Email:</strong>
-                {{ doctor.email }}
-            </p>
-
-            <p>
-                <strong>Specialization:</strong>
+            <p class="text-muted">
                 {{ doctor.specialization }}
-            </p>
-
-            <p>
-                <strong>Qualification:</strong>
-                {{ doctor.qualification }}
-            </p>
-
-            <p>
-                <strong>Experience:</strong>
-                {{ doctor.experience }} Years
-            </p>
-
-            <p>
-                <strong>Phone:</strong>
-                {{ doctor.phone }}
-            </p>
-
-            <p>
-                <strong>Available:</strong>
-
-                {% if doctor.available %}
-                    ✅ Yes
-                {% else %}
-                    ❌ No
-                {% endif %}
             </p>
 
         </div>
 
     </div>
 
+
+
+
+
+    <!-- Statistics Cards -->
+
+    <div class="row mb-4">
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h5>
+                        Total Appointments
+                    </h5>
+
+                    <h2>
+                        {{ total }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h5>
+                        Pending Requests
+                    </h5>
+
+                    <h2>
+                        {{ pending }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h5>
+                        Confirmed
+                    </h5>
+
+                    <h2>
+                        {{ confirmed }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- Doctor Information -->
+
+    <div class="card shadow mb-4">
+
+
+        <div class="card-header bg-primary text-white">
+
+            <h4>
+                Profile Information
+            </h4>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <p>
+                <strong>Email:</strong>
+                {{ doctor.email }}
+            </p>
+
+
+            <p>
+                <strong>Qualification:</strong>
+                {{ doctor.qualification }}
+            </p>
+
+
+            <p>
+                <strong>Experience:</strong>
+                {{ doctor.experience }} Years
+            </p>
+
+
+            <p>
+                <strong>Phone:</strong>
+                {{ doctor.phone }}
+            </p>
+
+
+            <p>
+                <strong>Status:</strong>
+
+                {% if doctor.available %}
+
+                    <span class="badge bg-success">
+                        Available
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+                        Not Available
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- Appointment Requests -->
+
+    <div class="card shadow">
+
+
+        <div class="card-header bg-dark text-white">
+
+            <h4>
+                Recent Appointment Requests
+            </h4>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+            {% if appointments %}
+
+
+            <table class="table table-bordered">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Reason
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                {% for appointment in appointments %}
+
+
+                    <tr>
+
+                        <td>
+                            {{ appointment.patient.full_name }}
+                        </td>
+
+
+                        <td>
+                            {{ appointment.appointment_date }}
+                        </td>
+
+
+                        <td>
+                            {{ appointment.appointment_time }}
+                        </td>
+
+
+                        <td>
+                            {{ appointment.reason }}
+                        </td>
+
+
+                        <td>
+
+                            {% if appointment.status == "Pending" %}
+
+                                <span class="badge bg-warning">
+                                    Pending
+                                </span>
+
+                            {% elif appointment.status == "Confirmed" %}
+
+                                <span class="badge bg-success">
+                                    Confirmed
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    {{ appointment.status }}
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+            {% else %}
+
+
+            <div class="alert alert-info">
+
+                No appointment requests yet.
+
+            </div>
+
+
+            {% endif %}
+
+
+
+        </div>
+
+
+    </div>
+
+
+
 </div>
+
 
 {% endblock %}

@@ -67,83 +67,94 @@
 
                     {% if current_user.is_authenticated %}
 
-                    <li class="nav-item">
+    {% if current_user.role == "patient" %}
 
-                        <a class="nav-link"
-                           href="{{ url_for('patient.dashboard') }}">
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('patient.dashboard') }}">
+                Dashboard
+            </a>
+        </li>
 
-                            Dashboard
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('patient.doctors') }}">
+                Book Appointment
+            </a>
+        </li>
 
-                        </a>
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('patient.appointments') }}">
+                My Appointments
+            </a>
+        </li>
 
-                    </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('patient.profile') }}">
+                Profile
+            </a>
+        </li>
 
-                        <li class="nav-item">
+    {% elif current_user.role == "doctor" %}
 
-                            <a class="nav-link"
-                               href="{{ url_for('patient.doctors') }}">
-                        
-                                Book Appointment
-                        
-                            </a>
-                        
-                        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('doctor.dashboard') }}">
+                Dashboard
+            </a>
+        </li>
 
-                    
-                    <li class="nav-item">
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('doctor.profile') }}">
+                My Profile
+            </a>
+        </li>
 
-                        <a class="nav-link" 
-                            href="{{ url_for('patient.appointments') }}">
-                            My Appointments
-                        </a>
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('doctor.appointments') }}">
+                Appointments
+            </a>
+        </li>
 
-                    </li>
+    {% elif current_user.role == "admin" %}
 
-                    <li class="nav-item">
+        <li class="nav-item">
+            <a class="nav-link"
+               href="{{ url_for('admin.dashboard') }}">
+                Dashboard
+            </a>
+        </li>
 
-                        <a class="nav-link"
-                            href="{{ url_for('patient.profile') }}">
-                            Profile
-                        </a>
+    {% endif %}
 
-                    </li>
+    <li class="nav-item">
+        <a class="nav-link text-warning"
+           href="{{ url_for('auth.logout') }}">
+            Logout
+        </a>
+    </li>
 
-                    <li class="nav-item">
+{% else %}
 
-                        <a class="nav-link text-warning"
-                           href="{{ url_for('auth.logout') }}">
+    <li class="nav-item">
+        <a class="nav-link"
+           href="{{ url_for('auth.login') }}">
+            Login
+        </a>
+    </li>
 
-                            Logout
+    <li class="nav-item">
+        <a class="nav-link"
+           href="{{ url_for('auth.register') }}">
+            Register
+        </a>
+    </li>
 
-                        </a>
-
-                    </li>
-
-                    {% else %}
-
-                    <li class="nav-item">
-
-                        <a class="nav-link"
-                           href="{{ url_for('auth.login') }}">
-
-                            Login
-
-                        </a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link"
-                           href="{{ url_for('auth.register') }}">
-
-                            Register
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
+{% endif %}
 
                 </ul>
 

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Doctor
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>Add New Doctor</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input
+                        type="text"
+                        name="full_name"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Specialization</label>
+                
+                    <select
+                        id="specialization"
+                        name="specialization"
+                        class="form-select"
+                        onchange="toggleSpecialization()"
+                        required>
+                
+                        <option value="">Select Specialization</option>
+                
+                        <option>General Physician</option>
+                        <option>Cardiologist</option>
+                        <option>Neurologist</option>
+                        <option>Dermatologist</option>
+                        <option>Pediatrician</option>
+                        <option>Orthopedic</option>
+                        <option>Gynecologist</option>
+                        <option>Psychiatrist</option>
+                        <option>ENT Specialist</option>
+                        <option>Ophthalmologist</option>
+                        <option>Dentist</option>
+                
+                        <option value="Other">Other</option>
+                
+                    </select>
+                
+                </div>
+                
+                <div
+                    id="customSpecializationDiv"
+                    class="mb-3"
+                    style="display:none;">
+                
+                    <label class="form-label">
+                        Enter Specialization
+                    </label>
+                
+                    <input
+                        type="text"
+                        id="customSpecialization"
+                        class="form-control">
+                
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Qualification</label>
+                
+                    <select
+                        id="qualification"
+                        name="qualification"
+                        class="form-select"
+                        onchange="toggleQualification()"
+                        required>
+                
+                        <option value="">Select Qualification</option>
+                
+                        <option>MBBS</option>
+                        <option>MBBS, MD</option>
+                        <option>MBBS, MS</option>
+                        <option>MBBS, MD Cardiology</option>
+                        <option>MBBS, MD Neurology</option>
+                        <option>MBBS, MD Dermatology</option>
+                        <option>MBBS, MD Pediatrics</option>
+                        <option>MBBS, MS Orthopedics</option>
+                
+                        <option value="Other">Other</option>
+                
+                    </select>
+                
+                </div>
+                
+                <div
+                    id="customQualificationDiv"
+                    class="mb-3"
+                    style="display:none;">
+                
+                    <label class="form-label">
+                        Enter Qualification
+                    </label>
+                
+                    <input
+                        type="text"
+                        id="customQualification"
+                        class="form-control">
+                
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Experience (Years)</label>
+                    <input
+                        type="number"
+                        name="experience"
+                        class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input
+                        type="text"
+                        name="phone"
+                        class="form-control">
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success">
+
+                    Add Doctor
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    function toggleSpecialization(){
+    
+        let select=document.getElementById("specialization");
+        let div=document.getElementById("customSpecializationDiv");
+        let input=document.getElementById("customSpecialization");
+    
+        if(select.value==="Other"){
+            div.style.display="block";
+            input.name="specialization";
+        }else{
+            div.style.display="none";
+            input.name="";
+        }
+    
+    }
+    
+    function toggleQualification(){
+    
+        let select=document.getElementById("qualification");
+        let div=document.getElementById("customQualificationDiv");
+        let input=document.getElementById("customQualification");
+    
+        if(select.value==="Other"){
+            div.style.display="block";
+            input.name="qualification";
+        }else{
+            div.style.display="none";
+            input.name="";
+        }
+    
+    }
+    
+    </script>
+{% endblock %}

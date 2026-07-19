@@ -40,7 +40,7 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
-        role = request.form.get("role")
+        role = "patient"
 
         # Check empty fields
         if not full_name or not email or not password or not confirm_password:
@@ -73,21 +73,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        # Create doctor profile if selected
-        if role == "doctor":
-
-            doctor = Doctor(
-                user_id=new_user.id,
-                full_name=full_name,
-                specialization="General",
-                qualification="Not Added",
-                experience=0,
-                email=email,
-                phone="Not Added",
-            )
-
-            db.session.add(doctor)
-            db.session.commit()
+        
 
         flash("Registration successful! Please login.", "success")
 
