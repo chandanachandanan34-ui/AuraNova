@@ -1,14 +1,20 @@
 """
-Shared Flask extension instances.
-
-Extensions are initialized here and bound to the application
-inside the application factory (create_app).
+Application extensions.
 """
 
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 
 db = SQLAlchemy()
-migrate = Migrate()
+
 login_manager = LoginManager()
+
+migrate = Migrate()
+
+mail = Mail()
+
+login_manager.login_view = "auth.login"
+
+login_manager.login_message_category = "warning"

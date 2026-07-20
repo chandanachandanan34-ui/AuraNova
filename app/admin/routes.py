@@ -18,6 +18,8 @@ from flask_login import login_required
 from app.models.user import User
 from app.models.doctor import Doctor
 from app.models.appointment import Appointment
+from flask_mail import Message
+from app.extensions import mail
 
 bp = Blueprint("admin", __name__)
 
@@ -118,15 +120,51 @@ def approve_appointment(id):
 
     db.session.commit()
 
+    try:
+
+        msg = Message(
+            subject="AuraNova - Appointment Approved",
+            recipients=[appointment.patient.email]
+        )
+
+        msg.body = f"""
+Hello {appointment.patient.full_name},
+
+Great news!
+
+Your appointment has been APPROVED.
+
+Doctor:
+Dr. {appointment.doctor.full_name}
+
+Date:
+{appointment.appointment_date}
+
+Time:
+{appointment.appointment_time}
+
+Please visit the hospital/clinic on time.
+
+Thank you for choosing AuraNova.
+
+Regards,
+AuraNova Healthcare Team
+"""
+
+        mail.send(msg)
+
+    except Exception as e:
+
+        print("Email Error:", e)
+
     flash(
-        "Appointment approved!",
-        "success",
+        "Appointment approved and email sent!",
+        "success"
     )
 
     return redirect(
         url_for("admin.manage_appointments")
     )
-
 
 @bp.route("/reject-appointment/<int:id>")
 @login_required
@@ -138,14 +176,48 @@ def reject_appointment(id):
 
     db.session.commit()
 
+    try:
+
+        msg = Message(
+            subject="AuraNova - Appointment Rejected",
+            recipients=[appointment.patient.email]
+        )
+
+        msg.body = f"""
+Hello {appointment.patient.full_name},
+
+We regret to inform you that your appointment has been REJECTED.
+
+Doctor:
+Dr. {appointment.doctor.full_name}
+
+Date:
+{appointment.appointment_date}
+
+Time:
+{appointment.appointment_time}
+
+You may log in to AuraNova and book another appointment.
+
+Regards,
+AuraNova Healthcare Team
+"""
+
+        mail.send(msg)
+
+    except Exception as e:
+
+        print("Email Error:", e)
+
     flash(
-        "Appointment rejected!",
-        "warning",
+        "Appointment rejected and email sent!",
+        "warning"
     )
 
     return redirect(
         url_for("admin.manage_appointments")
     )
+
 
 @bp.route("/edit-doctor/<int:id>", methods=["GET", "POST"])
 @login_required

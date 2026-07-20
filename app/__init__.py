@@ -11,7 +11,12 @@ from dotenv import load_dotenv
 from flask import Flask, render_template
 
 from app.config import config
-from app.extensions import db, login_manager, migrate
+from app.extensions import (
+    db,
+    login_manager,
+    migrate,
+    mail,
+)
 
 
 def create_app(config_name=None):
@@ -24,7 +29,10 @@ def create_app(config_name=None):
     app = Flask(__name__)
 
     if config_name is None:
-        config_name = os.environ.get("FLASK_ENV", "development")
+        config_name = os.environ.get(
+            "FLASK_ENV",
+            "development"
+        )
 
     app.config.from_object(
         config.get(
@@ -33,20 +41,25 @@ def create_app(config_name=None):
         )
     )
 
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
-
     login_manager.init_app(app)
+    mail.init_app(app)
+
     login_manager.login_view = "auth.login"
     login_manager.login_message_category = "info"
 
     # Import models
     from app.models import User  # noqa: F401
 
-    # Register user loader
+    # Register login manager
     from app.utils import login  # noqa: F401
 
+    # Register blueprints
     _register_blueprints(app)
+
+    # Register common routes
     _register_core_routes(app)
 
     return app
@@ -96,7 +109,7 @@ def _register_core_routes(app):
 
     @app.context_processor
     def inject_globals():
-        from datetime import UTC, datetime
+        from datetime import datetime, UTC
 
         return {
             "current_year": datetime.now(UTC).year
