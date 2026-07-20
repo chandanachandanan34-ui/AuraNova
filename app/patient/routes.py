@@ -21,6 +21,7 @@ from datetime import datetime
 from app.extensions import db
 from app.models.doctor import Doctor
 from app.models.appointment import Appointment
+from app.models.medical_record import MedicalRecord
 
 
 bp = Blueprint("patient", __name__)
@@ -240,4 +241,23 @@ def profile():
     return render_template(
         "patient/profile.html",
         user=current_user
+    )
+
+# -------------------------
+# Patient Medical Records
+# -------------------------
+
+@bp.route("/medical-records")
+@login_required
+def medical_records():
+
+    records = MedicalRecord.query.filter_by(
+        patient_id=current_user.id
+    ).order_by(
+        MedicalRecord.created_at.desc()
+    ).all()
+
+    return render_template(
+        "patient/medical_records.html",
+        records=records
     )

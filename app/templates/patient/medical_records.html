@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Medical Records
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        My Medical Records
+    </h2>
+
+    {% if records %}
+
+        {% for record in records %}
+
+        <div class="card shadow mb-4">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    Appointment Date:
+                    {{ record.appointment.appointment_date }}
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <p>
+
+                    <strong>Doctor:</strong>
+                    Dr. {{ record.doctor.user.full_name }}
+
+                </p>
+
+                <hr>
+
+                <h5>Diagnosis</h5>
+
+                <p>
+
+                    {{ record.diagnosis }}
+
+                </p>
+
+                <h5>Symptoms</h5>
+
+                <p>
+
+                    {{ record.symptoms or "Not Provided" }}
+
+                </p>
+
+                <h5>Prescription</h5>
+
+                <p style="white-space: pre-line;">
+
+                    {{ record.prescription }}
+
+                </p>
+
+                <h5>Doctor Notes</h5>
+
+                <p style="white-space: pre-line;">
+
+                    {{ record.notes or "No Notes" }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="alert alert-info">
+
+            No medical records available.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
