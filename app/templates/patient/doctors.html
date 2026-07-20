@@ -4,15 +4,36 @@
 Available Doctors
 {% endblock %}
 
-
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-5">
 
     <h2 class="mb-4">
-        Available Doctors
+        Find a Doctor
     </h2>
 
+    <form method="GET" class="mb-4">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Search by specialization..."
+                value="{{ search }}">
+
+            <button
+                class="btn btn-primary"
+                type="submit">
+
+                Search
+
+            </button>
+
+        </div>
+
+    </form>
 
     <div class="row">
 
@@ -20,41 +41,79 @@ Available Doctors
 
         <div class="col-md-4 mb-4">
 
-            <div class="card shadow">
+            <div class="card shadow h-100">
 
                 <div class="card-body">
 
-                    <h5 class="card-title">
-                        Dr. {{ doctor.user.username }}
-                    </h5>
+                    <h4 class="card-title text-primary">
 
+                        Dr. {{ doctor.full_name }}
+
+                    </h4>
+
+                    <hr>
 
                     <p>
-                        <strong>Specialization:</strong>
+
+                        <strong>Specialization:</strong><br>
+
                         {{ doctor.specialization }}
+
                     </p>
 
-
                     <p>
-                        <strong>Qualification:</strong>
+
+                        <strong>Qualification:</strong><br>
+
                         {{ doctor.qualification }}
-                    </p>
 
+                    </p>
 
                     <p>
-                        <strong>Experience:</strong>
-                        {{ doctor.experience }} years
+
+                        <strong>Experience:</strong><br>
+
+                        {{ doctor.experience }} Years
+
                     </p>
 
+                    <p>
 
-                    <a href="{{ url_for('patient.book_appointment', doctor_id=doctor.id) }}"
-   class="btn btn-primary">
+                        <strong>Phone:</strong><br>
 
-    Book Appointment
+                        {{ doctor.phone }}
 
-</a>
+                    </p>
+
+                    <span class="badge bg-success mb-3">
+
+                        Available
+
+                    </span>
+
+                    <br>
+
+                    <a
+                        href="{{ url_for('patient.book_appointment', doctor_id=doctor.id) }}"
+                        class="btn btn-primary w-100">
+
+                        Book Appointment
+
+                    </a>
 
                 </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="alert alert-warning">
+
+                No doctors found.
 
             </div>
 

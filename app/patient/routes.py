@@ -81,22 +81,30 @@ def dashboard():
 
 
 
-# -------------------------
-# View Doctors
-# -------------------------
-
 @bp.route("/doctors")
 @login_required
 def doctors():
 
-    doctors = Doctor.query.all()
+    search = request.args.get("search", "")
+
+    if search:
+
+        doctors = Doctor.query.filter(
+            Doctor.specialization.ilike(f"%{search}%"),
+            Doctor.available == True
+        ).all()
+
+    else:
+
+        doctors = Doctor.query.filter_by(
+            available=True
+        ).all()
 
     return render_template(
         "patient/doctors.html",
-        doctors=doctors
+        doctors=doctors,
+        search=search
     )
-
-
 
 # -------------------------
 # Book Appointment

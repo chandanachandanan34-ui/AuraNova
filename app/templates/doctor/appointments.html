@@ -17,17 +17,17 @@ Doctor Appointments
         <thead class="table-primary">
 
             <tr>
-
+            
                 <th>ID</th>
                 <th>Patient</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
                 <th>Action</th>
-
+            
             </tr>
-
-        </thead>
+            
+            </thead>
 
         <tbody>
 
@@ -96,6 +96,42 @@ Doctor Appointments
                     {% endif %}
 
                 </td>
+
+                <td>
+
+                    {% if appointment.status=="Pending" %}
+                    
+                    <a href="{{ url_for('doctor.accept_appointment', id=appointment.id) }}"
+                    class="btn btn-success btn-sm">
+                    
+                    Accept
+                    
+                    </a>
+                    
+                    <a href="{{ url_for('doctor.reject_appointment', id=appointment.id) }}"
+                    class="btn btn-danger btn-sm">
+                    
+                    Reject
+                    
+                    </a>
+                    
+                    {% elif appointment.status=="Confirmed" %}
+
+<a
+href="{{ url_for('doctor.add_medical_record', id=appointment.id) }}"
+class="btn btn-primary btn-sm">
+
+Add Medical Record
+
+</a>
+                    
+                    {% else %}
+                    
+                    {{ appointment.status }}
+                    
+                    {% endif %}
+                    
+                    </td>
 
             </tr>
 

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Medical Record
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>
+                Add Medical Record
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <h5 class="mb-4">
+
+                Patient :
+                {{ appointment.patient.full_name }}
+
+            </h5>
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+
+                    {{ form.diagnosis.label(class="form-label") }}
+
+                    {{ form.diagnosis(
+                        class="form-control",
+                        rows="3"
+                    ) }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    {{ form.symptoms.label(class="form-label") }}
+
+                    {{ form.symptoms(
+                        class="form-control",
+                        rows="3"
+                    ) }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    {{ form.prescription.label(class="form-label") }}
+
+                    {{ form.prescription(
+                        class="form-control",
+                        rows="4"
+                    ) }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    {{ form.notes.label(class="form-label") }}
+
+                    {{ form.notes(
+                        class="form-control",
+                        rows="4"
+                    ) }}
+
+                </div>
+
+                {{ form.submit(
+                    class="btn btn-success"
+                ) }}
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

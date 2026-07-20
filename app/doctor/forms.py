@@ -9,6 +9,7 @@ from wtforms import (
     IntegerField,
     StringField,
     SubmitField,
+    TextAreaField,
 )
 
 from wtforms.validators import (
@@ -67,4 +68,31 @@ class DoctorProfileForm(FlaskForm):
     )
 
     submit = SubmitField("Update Profile")
-    
+
+
+# ----------------------------------
+# Medical Record Form
+# ----------------------------------
+
+class MedicalRecordForm(FlaskForm):
+
+    diagnosis = TextAreaField(
+        "Diagnosis",
+        validators=[DataRequired()]
+    )
+
+    symptoms = TextAreaField(
+        "Symptoms"
+    )
+
+    prescription = TextAreaField(
+        "Prescription"
+    )
+
+    notes = TextAreaField(
+        "Doctor Notes"
+    )
+
+    submit = SubmitField(
+        "Save Medical Record"
+    )

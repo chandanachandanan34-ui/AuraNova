@@ -8,6 +8,7 @@ from flask import (
     flash,
     redirect,
     url_for,
+    abort,
 )
 
 from flask_login import (
@@ -16,8 +17,11 @@ from flask_login import (
 )
 
 from app.extensions import db
-from app.models import Doctor, Appointment
-from app.doctor.forms import DoctorProfileForm
+from app.models import Doctor, Appointment, MedicalRecord
+from app.doctor.forms import (
+    DoctorProfileForm,
+    MedicalRecordForm,
+)
 
 bp = Blueprint("doctor", __name__)
 
@@ -55,10 +59,10 @@ def dashboard():
     )
 
 
-    confirmed = len(
+    approved  = len(
         [
             a for a in appointments
-            if a.status == "Confirmed"
+            if a.status == "Approved"
         ]
     )
 
@@ -69,7 +73,7 @@ def dashboard():
         appointments=appointments,
         total=total,
         pending=pending,
-        confirmed=confirmed
+        approved=approved 
     )
 
 
@@ -141,23 +145,24 @@ def appointments():
         appointments=appointments
     )
 
+
 # -------------------------
-# Confirm Appointment
+# Accept Appointment
 # -------------------------
 
-@bp.route("/appointment/<int:id>/confirm")
+@bp.route("/accept/<int:id>")
 @login_required
-def confirm_appointment(id):
+def accept_appointment(id):
+
+    appointment = Appointment.query.get_or_404(id)
 
     doctor = Doctor.query.filter_by(
         user_id=current_user.id
     ).first_or_404()
 
-    appointment = Appointment.query.get_or_404(id)
-
     if appointment.doctor_id != doctor.id:
-        flash("Unauthorized action.", "danger")
-        return redirect(url_for("doctor.appointments"))
+
+        abort(403)
 
     appointment.status = "Confirmed"
 
@@ -165,7 +170,7 @@ def confirm_appointment(id):
 
     flash(
         "Appointment confirmed successfully!",
-        "success",
+        "success"
     )
 
     return redirect(
@@ -177,9 +182,72 @@ def confirm_appointment(id):
 # Reject Appointment
 # -------------------------
 
-@bp.route("/appointment/<int:id>/reject")
+@bp.route("/reject/<int:id>")
 @login_required
 def reject_appointment(id):
+
+    appointment = Appointment.query.get_or_404(id)
+
+    doctor = Doctor.query.filter_by(
+        user_id=current_user.id
+    ).first_or_404()
+
+    if appointment.doctor_id != doctor.id:
+
+        abort(403)
+
+    appointment.status = "Rejected"
+
+    db.session.commit()
+
+    flash(
+        "Appointment rejected.",
+        "warning"
+    )
+
+    return redirect(
+        url_for("doctor.appointments")
+    )
+
+
+# -------------------------
+# Complete Appointment
+# -------------------------
+
+@bp.route("/complete/<int:id>")
+@login_required
+def complete_appointment(id):
+
+    appointment = Appointment.query.get_or_404(id)
+
+    doctor = Doctor.query.filter_by(
+        user_id=current_user.id
+    ).first_or_404()
+
+    if appointment.doctor_id != doctor.id:
+
+        abort(403)
+
+    appointment.status = "Completed"
+
+    db.session.commit()
+
+    flash(
+        "Appointment marked as completed.",
+        "success"
+    )
+
+    return redirect(
+        url_for("doctor.appointments")
+    )
+
+# -------------------------
+# Add Medical Record
+# -------------------------
+
+@bp.route("/medical-record/<int:id>", methods=["GET", "POST"])
+@login_required
+def add_medical_record(id):
 
     doctor = Doctor.query.filter_by(
         user_id=current_user.id
@@ -188,18 +256,61 @@ def reject_appointment(id):
     appointment = Appointment.query.get_or_404(id)
 
     if appointment.doctor_id != doctor.id:
-        flash("Unauthorized action.", "danger")
-        return redirect(url_for("doctor.appointments"))
+        abort(403)
 
-    appointment.status = "Rejected"
+    existing = MedicalRecord.query.filter_by(
+        appointment_id=appointment.id
+    ).first()
 
-    db.session.commit()
+    if existing:
 
-    flash(
-        "Appointment rejected successfully!",
-        "success",
-    )
+        flash(
+            "Medical record already exists.",
+            "warning"
+        )
 
-    return redirect(
-        url_for("doctor.appointments")
+        return redirect(
+            url_for("doctor.appointments")
+        )
+
+    form = MedicalRecordForm()
+
+    if form.validate_on_submit():
+
+        record = MedicalRecord(
+
+            patient_id=appointment.patient_id,
+
+            doctor_id=doctor.id,
+
+            appointment_id=appointment.id,
+
+            diagnosis=form.diagnosis.data,
+
+            symptoms=form.symptoms.data,
+
+            prescription=form.prescription.data,
+
+            notes=form.notes.data,
+        )
+
+        db.session.add(record)
+
+        appointment.status = "Completed"
+
+        db.session.commit()
+
+        flash(
+            "Medical Record saved successfully!",
+            "success"
+        )
+
+        return redirect(
+            url_for("doctor.appointments")
+        )
+
+    return render_template(
+        "doctor/add_medical_record.html",
+        form=form,
+        appointment=appointment
     )
