@@ -6,6 +6,8 @@ from flask import (
     Blueprint,
     render_template,
     request,
+    send_file,
+    session,
 )
 
 from rapidfuzz import process, fuzz
@@ -13,6 +15,7 @@ from rapidfuzz import process, fuzz
 from flask import send_file
 from reportlab.pdfgen import canvas
 import io
+from app.pdf_utils import generate_ai_report
 
 bp = Blueprint("ai", __name__)
 
@@ -508,7 +511,25 @@ def chatbot():
 
             }
 
+    session["latest_report"] = response
     return render_template(
         "ai/chatbot.html",
         response=response
+    )
+
+@bp.route("/download-report")
+def download_report():
+
+    report = session.get("latest_report")
+
+    if not report:
+        return "No report available."
+
+    pdf = generate_ai_report(report)
+
+    return send_file(
+        pdf,
+        as_attachment=True,
+        download_name="AuraNova_AI_Report.pdf",
+        mimetype="application/pdf"
     )
