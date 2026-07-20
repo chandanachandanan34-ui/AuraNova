@@ -17,21 +17,21 @@ Doctor Appointments
         <thead class="table-primary">
 
             <tr>
-            
+
                 <th>ID</th>
                 <th>Patient</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
                 <th>Action</th>
-            
+
             </tr>
-            
-            </thead>
+
+        </thead>
 
         <tbody>
 
-            {% for appointment in appointments %}
+        {% for appointment in appointments %}
 
             <tr>
 
@@ -51,16 +51,28 @@ Doctor Appointments
                             Pending
                         </span>
 
-                    {% elif appointment.status == "Confirmed" %}
+                    {% elif appointment.status == "Approved" %}
 
                         <span class="badge bg-success">
-                            Confirmed
+                            Approved
                         </span>
 
-                    {% else %}
+                    {% elif appointment.status == "Rejected" %}
 
                         <span class="badge bg-danger">
                             Rejected
+                        </span>
+
+                    {% elif appointment.status == "Cancelled" %}
+
+                        <span class="badge bg-secondary">
+                            Cancelled
+                        </span>
+
+                    {% elif appointment.status == "Completed" %}
+
+                        <span class="badge bg-primary">
+                            Completed
                         </span>
 
                     {% endif %}
@@ -71,71 +83,45 @@ Doctor Appointments
 
                     {% if appointment.status == "Pending" %}
 
-                    <a
-                        href="{{ url_for('doctor.confirm_appointment', id=appointment.id) }}"
-                        class="btn btn-success btn-sm">
+                        <span class="text-warning">
+                            Waiting for Admin
+                        </span>
 
-                        Confirm
+                    {% elif appointment.status == "Approved" %}
 
-                    </a>
+                        <a
+                            href="{{ url_for('doctor.add_medical_record', id=appointment.id) }}"
+                            class="btn btn-primary btn-sm">
 
-                    <a
-                        href="{{ url_for('doctor.reject_appointment', id=appointment.id) }}"
-                        class="btn btn-danger btn-sm">
+                            Add Medical Record
 
-                        Reject
+                        </a>
 
-                    </a>
+                    {% elif appointment.status == "Completed" %}
 
-                    {% else %}
+                        <span class="text-success">
+                            Record Added
+                        </span>
 
-                    <span class="text-muted">
-                        Completed
-                    </span>
+                    {% elif appointment.status == "Rejected" %}
+
+                        <span class="text-danger">
+                            Rejected
+                        </span>
+
+                    {% elif appointment.status == "Cancelled" %}
+
+                        <span class="text-secondary">
+                            Cancelled
+                        </span>
 
                     {% endif %}
 
                 </td>
 
-                <td>
-
-                    {% if appointment.status=="Pending" %}
-                    
-                    <a href="{{ url_for('doctor.accept_appointment', id=appointment.id) }}"
-                    class="btn btn-success btn-sm">
-                    
-                    Accept
-                    
-                    </a>
-                    
-                    <a href="{{ url_for('doctor.reject_appointment', id=appointment.id) }}"
-                    class="btn btn-danger btn-sm">
-                    
-                    Reject
-                    
-                    </a>
-                    
-                    {% elif appointment.status=="Confirmed" %}
-
-<a
-href="{{ url_for('doctor.add_medical_record', id=appointment.id) }}"
-class="btn btn-primary btn-sm">
-
-Add Medical Record
-
-</a>
-                    
-                    {% else %}
-                    
-                    {{ appointment.status }}
-                    
-                    {% endif %}
-                    
-                    </td>
-
             </tr>
 
-            {% endfor %}
+        {% endfor %}
 
         </tbody>
 

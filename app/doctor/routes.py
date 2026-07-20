@@ -5,6 +5,7 @@ Doctor portal routes.
 from flask import (
     Blueprint,
     render_template,
+    request,
     flash,
     redirect,
     url_for,
@@ -240,6 +241,7 @@ def complete_appointment(id):
     return redirect(
         url_for("doctor.appointments")
     )
+       
 
 # -------------------------
 # Add Medical Record

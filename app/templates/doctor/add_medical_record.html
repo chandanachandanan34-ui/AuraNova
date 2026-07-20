@@ -11,20 +11,14 @@ Add Medical Record
     <div class="card shadow">
 
         <div class="card-header bg-primary text-white">
-
-            <h3>
-                Add Medical Record
-            </h3>
-
+            <h3>Add Medical Record</h3>
         </div>
 
         <div class="card-body">
 
             <h5 class="mb-4">
-
-                Patient :
+                Patient:
                 {{ appointment.patient.full_name }}
-
             </h5>
 
             <form method="POST">
@@ -78,6 +72,14 @@ Add Medical Record
                 {{ form.submit(
                     class="btn btn-success"
                 ) }}
+
+                <a
+                    href="{{ url_for('doctor.appointments') }}"
+                    class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
 
             </form>
 
