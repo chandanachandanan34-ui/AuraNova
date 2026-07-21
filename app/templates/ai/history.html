@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Report History
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="mb-4">
+        🤖 My AI Health Reports
+    </h2>
+
+    {% if reports %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>Date</th>
+                    <th>Symptoms</th>
+                    <th>Condition</th>
+                    <th>Severity</th>
+                    <th>Doctor</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for report in reports %}
+
+                <tr>
+
+                    <td>
+                        {{ report.local_time.strftime("%d-%m-%Y %I:%M %p") }}
+                    </td>
+
+                    <td>
+                        {{ report.symptoms }}
+                    </td>
+
+                    <td>
+                        {{ report.condition }}
+                    </td>
+
+                    <td>
+                        {{ report.severity }}
+                    </td>
+
+                    <td>
+                        {{ report.doctor }}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('ai.delete_report', report_id=report.id) }}"
+                              method="POST"
+                              onsubmit="return confirm('Delete this AI report?');">
+                    
+                            <button
+                                type="submit"
+                                class="btn btn-danger btn-sm">
+                                🗑 Delete
+                            </button>
+                    
+                        </form>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+
+        No AI reports found.
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

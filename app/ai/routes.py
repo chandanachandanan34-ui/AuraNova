@@ -8,6 +8,7 @@ from flask import (
     request,
     send_file,
     session,
+    redirect,
 )
 
 from rapidfuzz import process, fuzz
@@ -16,6 +17,12 @@ from flask import send_file
 from reportlab.pdfgen import canvas
 import io
 from app.pdf_utils import generate_ai_report
+from flask_login import current_user
+
+from app.models.ai_report import AIReport
+from app.extensions import db
+
+from datetime import timedelta
 
 bp = Blueprint("ai", __name__)
 
@@ -353,11 +360,19 @@ def chatbot():
                 )
 
             # Fuzzy match
-            matched = process.extractOne(
-                emergency,
-                phrases,
-                score_cutoff=75
-            )
+            matched = False
+
+            for phrase in phrases:
+
+                if fuzz.ratio(
+                    phrase,
+                    emergency
+                ) >= 90:
+
+                    matched = True
+                    break
+
+
 
             if matched:
 
@@ -403,15 +418,19 @@ def chatbot():
                     found = True
                     break
 
-                # Fuzzy match
-                score = process.extractOne(
-                    keyword,
-                    phrases,
-                    score_cutoff=80
+                # Fuzzy comparison
+                for phrase in phrases:
+
+                    similarity = fuzz.ratio(
+                    phrase,
+                    keyword
                 )
 
-                if score:
-                    found = True
+                    if similarity >= 90:
+                        found = True
+                        break
+
+                if found:
                     break
 
             if found:
@@ -510,8 +529,26 @@ def chatbot():
                 "emergency": False
 
             }
+        # ---------------------------------------
+        # Save AI Report to Database
+        # ---------------------------------------
 
-    session["latest_report"] = response
+        if current_user.is_authenticated:
+
+            report = AIReport(
+                patient_id=current_user.id,
+                symptoms=", ".join(response["detected"]),
+                condition=response["condition"],
+                severity=response["severity"],
+                doctor=response["doctor"]
+            )
+
+            db.session.add(report)
+            db.session.commit()
+
+        # Save report in session for PDF download
+        session["latest_report"] = response
+
     return render_template(
         "ai/chatbot.html",
         response=response
@@ -533,3 +570,40 @@ def download_report():
         download_name="AuraNova_AI_Report.pdf",
         mimetype="application/pdf"
     )
+
+@bp.route("/history")
+def history():
+
+    if not current_user.is_authenticated:
+        return redirect("/auth/login")
+
+    reports = (
+        AIReport.query
+        .filter_by(patient_id=current_user.id)
+        .order_by(AIReport.created_at.desc())
+        .all()
+    )   
+    for report in reports:
+        report.local_time = report.created_at + timedelta(hours=5, minutes=30)
+
+    return render_template(
+        "ai/history.html",
+        reports=reports
+    )
+@bp.route("/delete-report/<int:report_id>", methods=["POST"])
+def delete_report(report_id):
+
+    if not current_user.is_authenticated:
+        return redirect("/auth/login")
+
+    report = AIReport.query.filter_by(
+        id=report_id,
+        patient_id=current_user.id
+    ).first()
+
+    if report:
+
+        db.session.delete(report)
+        db.session.commit()
+
+    return redirect("/ai/history")
