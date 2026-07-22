@@ -15,9 +15,13 @@ from werkzeug.security import generate_password_hash
 from app.extensions import db
 from flask_login import login_required
 
-from app.models.user import User
-from app.models.doctor import Doctor
-from app.models.appointment import Appointment
+from app.models import (
+    User,
+    Doctor,
+    Appointment,
+    AIReport,
+    PatientDocument,
+)
 from flask_mail import Message
 from app.extensions import mail
 
@@ -34,11 +38,37 @@ def dashboard():
 
     total_appointments = Appointment.query.count()
 
+    total_ai_reports = AIReport.query.count()
+
+    total_documents = PatientDocument.query.count()
+
+    pending = Appointment.query.filter_by(
+        status="Pending"
+    ).count()
+
+    approved = Appointment.query.filter_by(
+        status="Approved"
+    ).count()
+
+    completed = Appointment.query.filter_by(
+        status="Completed"
+    ).count()
+
+    cancelled = Appointment.query.filter_by(
+        status="Cancelled"
+    ).count()
+
     return render_template(
         "admin/dashboard.html",
         total_patients=total_patients,
         total_doctors=total_doctors,
         total_appointments=total_appointments,
+        total_ai_reports=total_ai_reports,
+        total_documents=total_documents,
+        pending=pending,
+        approved=approved,
+        completed=completed,
+        cancelled=cancelled,
     )
 @bp.route("/add-doctor", methods=["GET", "POST"])
 @login_required

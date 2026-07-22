@@ -8,89 +8,93 @@ Admin Dashboard
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">
-        Admin Dashboard
-    </h2>
+    <h2>🛡️ Admin Dashboard</h2>
 
-    <div class="row">
+    <p class="text-muted">
+        AuraNova Healthcare Analytics
+    </p>
 
-        <div class="col-md-4">
+    <div class="row mt-4">
 
-            <div class="card shadow border-primary">
-
-                <div class="card-body text-center">
-
-                    <h1>{{ total_doctors }}</h1>
-
-                    <h5>Total Doctors</h5>
-
-                </div>
-
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>👥</h2>
+                <h3>{{ total_patients }}</h3>
+                <p>Total Patients</p>
             </div>
-
         </div>
 
-        <div class="col-md-4">
-
-            <div class="card shadow border-success">
-
-                <div class="card-body text-center">
-
-                    <h1>{{ total_patients }}</h1>
-
-                    <h5>Total Patients</h5>
-
-                </div>
-
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>👨‍⚕️</h2>
+                <h3>{{ total_doctors }}</h3>
+                <p>Total Doctors</p>
             </div>
-
         </div>
 
-        <div class="col-md-4">
-
-            <div class="card shadow border-warning">
-
-                <div class="card-body text-center">
-
-                    <h1>{{ total_appointments }}</h1>
-
-                    <h5>Total Appointments</h5>
-
-                </div>
-
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>📅</h2>
+                <h3>{{ total_appointments }}</h3>
+                <p>Total Appointments</p>
             </div>
+        </div>
 
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>🤖</h2>
+                <h3>{{ total_ai_reports }}</h3>
+                <p>AI Reports</p>
+            </div>
         </div>
 
     </div>
 
-    <hr class="my-5">
+    <div class="row">
 
-    <div class="d-grid gap-3">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>📄</h2>
+                <h3>{{ total_documents }}</h3>
+                <p>Documents Uploaded</p>
+            </div>
+        </div>
 
-    <a
-    href="{{ url_for('admin.add_doctor') }}"
-    class="btn btn-primary btn-lg">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>🟡</h2>
+                <h3>{{ pending }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
 
-    Add Doctor
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>🟢</h2>
+                <h3>{{ approved }}</h3>
+                <p>Approved</p>
+            </div>
+        </div>
 
-    </a>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>✅</h2>
+                <h3>{{ completed }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
 
-    <a
-        href="{{ url_for('admin.view_doctors') }}"
-        class="btn btn-success btn-lg">
+    </div>
 
-        View Doctors
+    <div class="row">
 
-    </a>
-
-    <a
-    href="{{ url_for('admin.manage_appointments') }}"
-    class="btn btn-warning btn-lg">
-
-    Manage Appointments
-
-</a>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow text-center p-3">
+                <h2>❌</h2>
+                <h3>{{ cancelled }}</h3>
+                <p>Cancelled</p>
+            </div>
+        </div>
 
     </div>
 
