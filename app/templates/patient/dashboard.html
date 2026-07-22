@@ -133,26 +133,35 @@ Quick Actions
 
 <div class="card-body">
 
-
-<a href="{{ url_for('patient.doctors') }}"
-class="btn btn-success me-2">
-
-Book Appointment
-
-</a>
-
-
-
-<a href="{{ url_for('patient.appointments') }}"
-class="btn btn-info">
-
-My Appointments
-
-</a>
-
-
-</div>
-
+    <a href="{{ url_for('patient.doctors') }}"
+    class="btn btn-success me-2">
+    
+    Book Appointment
+    
+    </a>
+    
+    <a href="{{ url_for('patient.appointments') }}"
+    class="btn btn-info me-2">
+    
+    My Appointments
+    
+    </a>
+    
+    <a href="{{ url_for('patient.medical_records') }}"
+    class="btn btn-warning me-2">
+    
+    Medical Records
+    
+    </a>
+    
+    <a href="{{ url_for('patient.upload_document') }}"
+    class="btn btn-primary">
+    
+    📄 Medical Documents
+    
+    </a>
+    
+    </div>
 
 </div>
 

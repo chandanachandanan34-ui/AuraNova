@@ -8,7 +8,9 @@ from flask import (
     request,
     redirect,
     url_for,
-    flash
+    flash,
+    send_file,
+    current_app
 )
 
 from flask_login import (
@@ -22,6 +24,11 @@ from app.extensions import db
 from app.models.doctor import Doctor
 from app.models.appointment import Appointment
 from app.models.medical_record import MedicalRecord
+from app.models.patient_document import PatientDocument
+
+from werkzeug.utils import secure_filename
+
+import os
 
 
 bp = Blueprint("patient", __name__)
@@ -260,4 +267,154 @@ def medical_records():
     return render_template(
         "patient/medical_records.html",
         records=records
+    )
+
+# -------------------------
+# Upload Patient Document
+# -------------------------
+
+@bp.route("/upload-document", methods=["GET", "POST"])
+@login_required
+def upload_document():
+
+    if request.method == "POST":
+
+        title = request.form.get("title")
+
+        description = request.form.get("description")
+
+        file = request.files.get("file")
+
+        if not file or file.filename == "":
+
+            flash(
+                "Please select a file.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("patient.upload_document")
+            )
+
+        filename = secure_filename(file.filename)
+
+        filepath = os.path.join(
+            bp.root_path,
+            "..",
+            "..",
+            "uploads",
+            filename
+        )
+
+        file.save(filepath)
+
+        document = PatientDocument(
+
+            patient_id=current_user.id,
+
+            title=title,
+
+            description=description,
+
+            file_name=filename
+
+        )
+
+        db.session.add(document)
+
+        db.session.commit()
+
+        flash(
+            "Document uploaded successfully!",
+            "success"
+        )
+
+        return redirect(
+            url_for("patient.upload_document")
+        )
+
+    documents = PatientDocument.query.filter_by(
+        patient_id=current_user.id
+    ).order_by(
+        PatientDocument.uploaded_at.desc()
+    ).all()
+
+    return render_template(
+        "patient/upload_document.html",
+        documents=documents
+    )
+
+# -------------------------
+# Download Patient Document
+# -------------------------
+
+@bp.route("/download-document/<int:id>")
+@login_required
+def download_document(id):
+
+    document = PatientDocument.query.get_or_404(id)
+
+    if document.patient_id != current_user.id:
+
+        flash(
+            "Unauthorized access!",
+            "danger"
+        )
+
+        return redirect(
+            url_for("patient.upload_document")
+        )
+
+    filepath = os.path.join(
+        bp.root_path,
+        "..",
+        "..",
+        "uploads",
+        document.file_name
+    )
+
+    return send_file(
+        filepath,
+        as_attachment=True
+    )
+
+# -------------------------
+# Delete Patient Document
+# -------------------------
+
+@bp.route("/delete-document/<int:id>")
+@login_required
+def delete_document(id):
+
+    document = PatientDocument.query.get_or_404(id)
+
+    if document.patient_id != current_user.id:
+
+        flash(
+            "Unauthorized access!",
+            "danger"
+        )
+
+        return redirect(
+            url_for("patient.upload_document")
+        )
+
+    filepath = os.path.join(
+        current_app.config["UPLOAD_FOLDER"],
+        document.file_name
+    )
+
+    if os.path.exists(filepath):
+        os.remove(filepath)
+
+    db.session.delete(document)
+    db.session.commit()
+
+    flash(
+        "Document deleted successfully!",
+        "success"
+    )
+
+    return redirect(
+        url_for("patient.upload_document")
     )

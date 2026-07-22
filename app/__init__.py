@@ -51,7 +51,14 @@ def create_app(config_name=None):
     login_manager.login_message_category = "info"
 
     # Import models
-    from app.models import User  # noqa: F401
+    from app.models import (
+    User,
+    Appointment,
+    Doctor,
+    MedicalRecord,
+    AIReport,
+    PatientDocument,
+)  # noqa: F401
 
     # Register login manager
     from app.utils import login  # noqa: F401

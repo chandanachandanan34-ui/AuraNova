@@ -316,3 +316,26 @@ def add_medical_record(id):
         form=form,
         appointment=appointment
     )
+
+# -------------------------
+# Doctor Medical Records
+# -------------------------
+
+@bp.route("/medical-records")
+@login_required
+def medical_records():
+
+    doctor = Doctor.query.filter_by(
+        user_id=current_user.id
+    ).first_or_404()
+
+    records = MedicalRecord.query.filter_by(
+        doctor_id=doctor.id
+    ).order_by(
+        MedicalRecord.created_at.desc()
+    ).all()
+
+    return render_template(
+        "doctor/medical_records.html",
+        records=records
+    )

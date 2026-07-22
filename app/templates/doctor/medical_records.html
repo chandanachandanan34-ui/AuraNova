@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+Doctor Medical Records
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>
+        📋 Medical Records
+    </h2>
+
+    <p class="text-muted">
+        Records created by you
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+    {% endwith %}
+
+    {% if records %}
+
+    <table class="table table-bordered table-hover mt-4">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>Patient</th>
+
+                <th>Diagnosis</th>
+
+                <th>Appointment Date</th>
+
+                <th>Created</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for record in records %}
+
+            <tr>
+
+                <td>
+
+                    {{ record.patient.full_name }}
+
+                </td>
+
+                <td>
+
+                    {{ record.diagnosis }}
+
+                </td>
+
+                <td>
+
+                    {{ record.appointment.appointment_date }}
+
+                </td>
+
+                <td>
+
+                    {{ record.created_at.strftime("%d %b %Y") }}
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <div class="alert alert-info">
+
+            No medical records found.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
