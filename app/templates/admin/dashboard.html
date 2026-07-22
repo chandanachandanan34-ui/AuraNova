@@ -97,7 +97,128 @@ Admin Dashboard
         </div>
 
     </div>
+    <hr class="my-5">
 
+    <div class="row">
+    
+        <div class="col-md-7">
+    
+            <div class="card shadow">
+    
+                <div class="card-header bg-primary text-white">
+                    Overall Statistics
+                </div>
+    
+                <div class="card-body">
+    
+                    <canvas id="overviewChart"></canvas>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+        <div class="col-md-5">
+    
+            <div class="card shadow">
+    
+                <div class="card-header bg-success text-white">
+                    Appointment Status
+                </div>
+    
+                <div class="card-body">
+    
+                    <canvas id="statusChart"></canvas>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
+
+const chartData = {{ chart_data | safe }};
+const statusData = {{ status_data | safe }};
+
+new Chart(
+
+    document.getElementById("overviewChart"),
+
+    {
+
+        type: "bar",
+
+        data: {
+
+            labels: chartData.labels,
+
+            datasets: [{
+
+                label: "AuraNova Statistics",
+
+                data: chartData.values,
+
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true
+
+                }
+
+            }
+
+        }
+
+    }
+
+);
+
+new Chart(
+
+    document.getElementById("statusChart"),
+
+    {
+
+        type: "pie",
+
+        data: {
+
+            labels: statusData.labels,
+
+            datasets: [{
+
+                data: statusData.values
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true
+
+        }
+
+    }
+
+);
+
+</script>
 {% endblock %}

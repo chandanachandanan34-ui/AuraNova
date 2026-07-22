@@ -1,6 +1,7 @@
 """
 Admin routes.
 """
+import json
 from flask import abort
 from flask import (
     Blueprint,
@@ -32,7 +33,9 @@ bp = Blueprint("admin", __name__)
 @login_required
 def dashboard():
 
-    total_patients = User.query.filter_by(role="patient").count()
+    total_patients = User.query.filter_by(
+        role="patient"
+    ).count()
 
     total_doctors = Doctor.query.count()
 
@@ -58,6 +61,38 @@ def dashboard():
         status="Cancelled"
     ).count()
 
+    chart_data = json.dumps({
+        "labels": [
+            "Patients",
+            "Doctors",
+            "Appointments",
+            "AI Reports",
+            "Documents"
+        ],
+        "values": [
+            total_patients,
+            total_doctors,
+            total_appointments,
+            total_ai_reports,
+            total_documents
+        ]
+    })
+
+    status_data = json.dumps({
+        "labels": [
+            "Pending",
+            "Approved",
+            "Completed",
+            "Cancelled"
+        ],
+        "values": [
+            pending,
+            approved,
+            completed,
+            cancelled
+        ]
+    })
+
     return render_template(
         "admin/dashboard.html",
         total_patients=total_patients,
@@ -69,6 +104,8 @@ def dashboard():
         approved=approved,
         completed=completed,
         cancelled=cancelled,
+        chart_data=chart_data,
+        status_data=status_data,
     )
 @bp.route("/add-doctor", methods=["GET", "POST"])
 @login_required
