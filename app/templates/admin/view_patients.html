@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Patients
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>👥 Patients</h2>
+
+    <p class="text-muted">
+        Registered patients in AuraNova
+    </p>
+
+    <form method="GET" class="mb-4">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Search patient..."
+                value="{{ search }}">
+
+            <button class="btn btn-primary">
+                Search
+            </button>
+
+        </div>
+
+    </form>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Name</th>
+
+                <th>Email</th>
+
+                <th>Appointments</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for patient in patients %}
+
+            <tr>
+
+                <td>{{ patient.id }}</td>
+
+                <td>
+
+                    <a href="{{ url_for('admin.patient_details', id=patient.id) }}">
+                
+                        {{ patient.full_name }}
+                
+                    </a>
+                
+                </td>
+
+                <td>{{ patient.email }}</td>
+
+                <td>
+
+                    {{ patient.appointments|length }}
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

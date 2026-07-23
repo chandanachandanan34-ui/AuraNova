@@ -27,7 +27,7 @@ from app.models.medical_record import MedicalRecord
 from app.models.patient_document import PatientDocument
 
 from werkzeug.utils import secure_filename
-
+from sqlalchemy import or_
 import os
 
 
@@ -67,6 +67,13 @@ def dashboard():
 
 
     total_doctors = Doctor.query.count()
+    total_records = MedicalRecord.query.filter_by(
+        patient_id=current_user.id
+    ).count()
+
+    total_documents = PatientDocument.query.filter_by(
+        patient_id=current_user.id
+    ).count()
 
 
     upcoming = Appointment.query.filter_by(
@@ -84,28 +91,45 @@ def dashboard():
         pending=pending_appointments,
         completed=completed_appointments,
         doctors=total_doctors,
+        total_records=total_records,
+        total_documents=total_documents,
         upcoming=upcoming
     )
 
 
 
+# -------------------------
+# Available Doctors
+# -------------------------
+
 @bp.route("/doctors")
 @login_required
 def doctors():
 
-    search = request.args.get("search", "")
+    search = request.args.get("search", "").strip()
 
     if search:
 
         doctors = Doctor.query.filter(
-            Doctor.specialization.ilike(f"%{search}%"),
-            Doctor.available == True
-        ).all()
+
+            Doctor.available == True,
+
+            or_(
+
+                Doctor.full_name.ilike(f"%{search}%"),
+
+                Doctor.specialization.ilike(f"%{search}%")
+
+            )
+
+        ).order_by(Doctor.full_name).all()
 
     else:
 
         doctors = Doctor.query.filter_by(
             available=True
+        ).order_by(
+            Doctor.full_name
         ).all()
 
     return render_template(
@@ -250,6 +274,49 @@ def profile():
         user=current_user
     )
 
+
+# -------------------------
+# Edit Patient Profile
+# -------------------------
+
+@bp.route("/edit-profile", methods=["GET", "POST"])
+@login_required
+def edit_profile():
+
+    if request.method == "POST":
+
+        current_user.full_name = request.form.get("full_name")
+        current_user.email = request.form.get("email")
+        current_user.phone = request.form.get("phone")
+        current_user.gender = request.form.get("gender")
+        current_user.blood_group = request.form.get("blood_group")
+        current_user.address = request.form.get("address")
+
+        dob = request.form.get("date_of_birth")
+
+        if dob:
+            current_user.date_of_birth = datetime.strptime(
+                dob,
+                "%Y-%m-%d"
+            ).date()
+
+        else:
+            current_user.date_of_birth = None
+
+        db.session.commit()
+
+        flash(
+            "Profile updated successfully!",
+            "success"
+        )
+
+        return redirect(
+            url_for("patient.profile")
+        )
+
+    return render_template(
+        "patient/edit_profile.html"
+    )
 # -------------------------
 # Patient Medical Records
 # -------------------------

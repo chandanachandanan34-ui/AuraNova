@@ -23,6 +23,7 @@ Doctor Appointments
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
+                <th>Patient</th>
                 <th>Action</th>
 
             </tr>
@@ -42,7 +43,17 @@ Doctor Appointments
                 <td>{{ appointment.appointment_date }}</td>
 
                 <td>{{ appointment.appointment_time }}</td>
+                <td>
 
+                    <a
+                        href="{{ url_for('doctor.patient_details', id=appointment.patient.id) }}"
+                        class="btn btn-info btn-sm">
+                
+                        View Patient
+                
+                    </a>
+                
+                </td>
                 <td>
 
                     {% if appointment.status == "Pending" %}

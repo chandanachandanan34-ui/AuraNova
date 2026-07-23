@@ -40,6 +40,26 @@ class User(UserMixin, db.Model):
         nullable=False
     )
 
+    phone = db.Column(
+        db.String(20)
+)
+
+    gender = db.Column(
+        db.String(20)
+)
+
+    blood_group = db.Column(
+        db.String(10)
+)
+
+    address = db.Column(
+        db.String(255)
+)
+
+    date_of_birth = db.Column(
+        db.Date
+)
+
 
     created_at = db.Column(
         db.DateTime,

@@ -165,7 +165,68 @@ def view_doctors():
         doctors=doctors,
     )
 
+# -------------------------
+# View Patients
+# -------------------------
 
+@bp.route("/view-patients")
+@login_required
+def view_patients():
+
+    search = request.args.get("search", "")
+
+    query = User.query.filter_by(role="patient")
+
+    if search:
+
+        query = query.filter(
+            User.full_name.ilike(f"%{search}%")
+        )
+
+    patients = query.order_by(
+        User.full_name
+    ).all()
+
+    return render_template(
+        "admin/view_patients.html",
+        patients=patients,
+        search=search,
+    )
+
+# -------------------------
+# Patient Details
+# -------------------------
+
+@bp.route("/patient/<int:id>")
+@login_required
+def patient_details(id):
+
+    patient = User.query.filter_by(
+        id=id,
+        role="patient"
+    ).first_or_404()
+
+    appointments = Appointment.query.filter_by(
+        patient_id=patient.id
+    ).order_by(
+        Appointment.created_at.desc()
+    ).all()
+
+    medical_records = patient.medical_records
+
+    documents = PatientDocument.query.filter_by(
+        patient_id=patient.id
+    ).order_by(
+        PatientDocument.uploaded_at.desc()
+    ).all()
+
+    return render_template(
+        "admin/patient_details.html",
+        patient=patient,
+        appointments=appointments,
+        medical_records=medical_records,
+        documents=documents
+    )
 @bp.route("/manage-appointments")
 @login_required
 def manage_appointments():

@@ -1,174 +1,177 @@
 {% extends "base.html" %}
 
-
 {% block title %}
 My Appointments
 {% endblock %}
 
-
-
 {% block content %}
 
+<div class="container mt-5">
 
-<div class="container mt-4">
+    <h2 class="mb-2">
+        📅 My Appointments
+    </h2>
 
+    <p class="text-muted">
+        View and manage all your appointments.
+    </p>
 
-<h2>
-My Appointments
-</h2>
+    {% if appointments %}
 
+    <div class="row">
 
+        {% for appointment in appointments %}
 
-{% if appointments %}
+        <div class="col-lg-6 mb-4">
 
+            <div class="card shadow border-0 h-100">
 
-<table class="table table-bordered shadow">
+                <div class="card-body">
 
+                    <div class="d-flex align-items-center">
 
-<thead class="table-primary">
+                        <div style="font-size:60px;">
+                            👨‍⚕️
+                        </div>
 
-<tr>
+                        <div class="ms-3">
 
-<th>
-Doctor
-</th>
+                            <h4 class="text-primary mb-1">
+                                Dr. {{ appointment.doctor.full_name }}
+                            </h4>
 
-<th>
-Specialization
-</th>
+                            <p class="text-muted mb-0">
+                                {{ appointment.doctor.specialization }}
+                            </p>
 
-<th>
-Date
-</th>
+                        </div>
 
-<th>
-Time
-</th>
+                    </div>
 
-<th>
-Reason
-</th>
+                    <hr>
 
-<th>
-Status
-</th>
+                    <div class="row">
 
-<th>
-Action
-</th>
+                        <div class="col-6 mb-3">
 
-</tr>
+                            <strong>📅 Date</strong><br>
 
+                            {{ appointment.appointment_date }}
 
-</thead>
+                        </div>
 
+                        <div class="col-6 mb-3">
 
+                            <strong>🕒 Time</strong><br>
 
-<tbody>
+                            {{ appointment.appointment_time }}
 
+                        </div>
 
-{% for appointment in appointments %}
+                        <div class="col-12 mb-3">
 
+                            <strong>📝 Reason</strong><br>
 
-<tr>
+                            {{ appointment.reason }}
 
+                        </div>
 
-<td>
+                    </div>
 
-{{ appointment.doctor.full_name }}
+                    {% if appointment.status == "Pending" %}
 
-</td>
+                        <span class="badge bg-warning text-dark">
+                            ⏳ Pending
+                        </span>
 
+                    {% elif appointment.status == "Approved" %}
 
-<td>
+                        <span class="badge bg-success">
+                            ✅ Approved
+                        </span>
 
-{{ appointment.doctor.specialization }}
+                    {% elif appointment.status == "Completed" %}
 
-</td>
+                        <span class="badge bg-primary">
+                            ✔ Completed
+                        </span>
 
+                    {% elif appointment.status == "Rejected" %}
 
-<td>
+                        <span class="badge bg-danger">
+                            ❌ Rejected
+                        </span>
 
-{{ appointment.appointment_date }}
+                    {% else %}
 
-</td>
+                        <span class="badge bg-secondary">
+                            🚫 Cancelled
+                        </span>
 
+                    {% endif %}
 
-<td>
+                    <hr>
 
-{{ appointment.appointment_time }}
+                    {% if appointment.status == "Pending" %}
 
-</td>
+                        <a
+                            href="{{ url_for('patient.cancel_appointment', id=appointment.id) }}"
+                            class="btn btn-outline-danger w-100">
 
+                            ❌ Cancel Appointment
 
-<td>
+                        </a>
 
-{{ appointment.reason }}
+                    {% else %}
 
-</td>
+                        <button
+                            class="btn btn-secondary w-100"
+                            disabled>
 
+                            No Action Available
 
-<td>
+                        </button>
 
-{{ appointment.status }}
+                    {% endif %}
 
-</td>
+                </div>
 
+            </div>
 
-<td>
+        </div>
 
+        {% endfor %}
 
-{% if appointment.status != "Cancelled" %}
+    </div>
 
-<a
-href="{{ url_for(
-'patient.cancel_appointment',
-id=appointment.id
-) }}"
-class="btn btn-danger btn-sm">
+    {% else %}
 
-Cancel
+    <div class="card shadow text-center p-5">
 
-</a>
+        <div style="font-size:70px;">
+            📅
+        </div>
 
-{% else %}
+        <h3 class="mt-3">
+            No Appointments Yet
+        </h3>
 
-Cancelled
+        <p class="text-muted">
+            Book your first appointment with our doctors.
+        </p>
 
-{% endif %}
+        <a
+            href="{{ url_for('patient.doctors') }}"
+            class="btn btn-primary">
 
+            👨‍⚕️ Find Doctors
 
-</td>
+        </a>
 
+    </div>
 
-</tr>
-
-
-{% endfor %}
-
-
-</tbody>
-
-
-</table>
-
-
-
-{% else %}
-
-
-<div class="alert alert-info">
-
-No appointments booked yet.
+    {% endif %}
 
 </div>
-
-
-{% endif %}
-
-
-
-</div>
-
 
 {% endblock %}

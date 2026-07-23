@@ -18,7 +18,13 @@ from flask_login import (
 )
 
 from app.extensions import db
-from app.models import Doctor, Appointment, MedicalRecord
+from app.models import (
+    User,
+    Doctor,
+    Appointment,
+    MedicalRecord,
+    PatientDocument,
+)
 from app.doctor.forms import (
     DoctorProfileForm,
     MedicalRecordForm,
@@ -338,4 +344,47 @@ def medical_records():
     return render_template(
         "doctor/medical_records.html",
         records=records
+    )
+
+# -------------------------
+# Doctor View Patient Details
+# -------------------------
+
+@bp.route("/patient/<int:id>")
+@login_required
+def patient_details(id):
+
+    doctor = Doctor.query.filter_by(
+        user_id=current_user.id
+    ).first_or_404()
+
+    patient = User.query.filter_by(
+        id=id,
+        role="patient"
+    ).first_or_404()
+
+    appointments = Appointment.query.filter_by(
+        patient_id=patient.id
+    ).order_by(
+        Appointment.created_at.desc()
+    ).all()
+
+    medical_records = MedicalRecord.query.filter_by(
+        patient_id=patient.id
+    ).order_by(
+        MedicalRecord.created_at.desc()
+    ).all()
+
+    documents = PatientDocument.query.filter_by(
+        patient_id=patient.id
+    ).order_by(
+        PatientDocument.uploaded_at.desc()
+    ).all()
+
+    return render_template(
+        "doctor/patient_details.html",
+        patient=patient,
+        appointments=appointments,
+        medical_records=medical_records,
+        documents=documents
     )

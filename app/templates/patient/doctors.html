@@ -8,9 +8,13 @@ Available Doctors
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">
-        Find a Doctor
+    <h2 class="mb-2">
+        👨‍⚕️ Find a Doctor
     </h2>
+
+    <p class="text-muted">
+        Search doctors by name or specialization.
+    </p>
 
     <form method="GET" class="mb-4">
 
@@ -20,14 +24,14 @@ Available Doctors
                 type="text"
                 name="search"
                 class="form-control"
-                placeholder="Search by specialization..."
+                placeholder="Search by doctor name or specialization..."
                 value="{{ search }}">
 
             <button
                 class="btn btn-primary"
                 type="submit">
 
-                Search
+                🔍 Search
 
             </button>
 
@@ -39,51 +43,25 @@ Available Doctors
 
         {% for doctor in doctors %}
 
-        <div class="col-md-4 mb-4">
+        <div class="col-lg-4 col-md-6 mb-4">
 
-            <div class="card shadow h-100">
+            <div class="card shadow h-100 border-0">
 
-                <div class="card-body">
+                <div class="card-body text-center">
 
-                    <h4 class="card-title text-primary">
+                    <div class="mb-3">
+
+                        <div style="font-size:60px;">
+                            👨‍⚕️
+                        </div>
+
+                    </div>
+
+                    <h4 class="text-primary">
 
                         Dr. {{ doctor.full_name }}
 
                     </h4>
-
-                    <hr>
-
-                    <p>
-
-                        <strong>Specialization:</strong><br>
-
-                        {{ doctor.specialization }}
-
-                    </p>
-
-                    <p>
-
-                        <strong>Qualification:</strong><br>
-
-                        {{ doctor.qualification }}
-
-                    </p>
-
-                    <p>
-
-                        <strong>Experience:</strong><br>
-
-                        {{ doctor.experience }} Years
-
-                    </p>
-
-                    <p>
-
-                        <strong>Phone:</strong><br>
-
-                        {{ doctor.phone }}
-
-                    </p>
 
                     <span class="badge bg-success mb-3">
 
@@ -91,13 +69,45 @@ Available Doctors
 
                     </span>
 
-                    <br>
+                    <hr>
+
+                    <p>
+
+                        <strong>🩺 Specialization</strong><br>
+
+                        {{ doctor.specialization }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>🎓 Qualification</strong><br>
+
+                        {{ doctor.qualification }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>💼 Experience</strong><br>
+
+                        {{ doctor.experience }} Years
+
+                    </p>
+
+                    <p>
+
+                        <strong>📞 Phone</strong><br>
+
+                        {{ doctor.phone }}
+
+                    </p>
 
                     <a
                         href="{{ url_for('patient.book_appointment', doctor_id=doctor.id) }}"
                         class="btn btn-primary w-100">
 
-                        Book Appointment
+                        📅 Book Appointment
 
                     </a>
 
@@ -111,7 +121,7 @@ Available Doctors
 
         <div class="col-12">
 
-            <div class="alert alert-warning">
+            <div class="alert alert-warning text-center">
 
                 No doctors found.
 

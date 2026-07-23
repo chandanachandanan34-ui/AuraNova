@@ -1,232 +1,225 @@
 {% extends "base.html" %}
 
-
 {% block title %}
 Patient Dashboard
 {% endblock %}
 
-
-
 {% block content %}
-
 
 <div class="container mt-5">
 
+    <h2>
+        Welcome, {{ user.full_name }} 👋
+    </h2>
 
-<h2>
-Welcome, {{ user.full_name }} 👋
-</h2>
+    <p class="text-muted">
+        Your AuraNova Healthcare Dashboard
+    </p>
 
-<p class="text-muted">
-Your AuraNova healthcare dashboard
-</p>
+    <!-- Statistics -->
 
+    <div class="row mt-4">
 
+        <div class="col-md-3 mb-4">
 
-<div class="row mt-4">
+            <div class="card shadow text-center p-3">
 
+                <h3>📅</h3>
 
-<div class="col-md-3">
+                <h4>{{ total_appointments }}</h4>
 
-<div class="card shadow text-center p-3">
+                <p>Total Appointments</p>
 
-<h3>
-📅
-</h3>
+            </div>
 
-<h4>
-{{ total_appointments }}
-</h4>
+        </div>
 
-<p>
-Appointments
-</p>
+        <div class="col-md-3 mb-4">
 
-</div>
+            <div class="card shadow text-center p-3">
 
-</div>
+                <h3>⏳</h3>
 
+                <h4>{{ pending }}</h4>
 
+                <p>Pending</p>
 
-<div class="col-md-3">
+            </div>
 
-<div class="card shadow text-center p-3">
+        </div>
 
-<h3>
-⏳
-</h3>
+        <div class="col-md-3 mb-4">
 
-<h4>
-{{ pending }}
-</h4>
+            <div class="card shadow text-center p-3">
 
-<p>
-Pending
-</p>
+                <h3>✅</h3>
 
-</div>
+                <h4>{{ completed }}</h4>
 
-</div>
+                <p>Completed</p>
 
+            </div>
 
+        </div>
 
-<div class="col-md-3">
+        <div class="col-md-3 mb-4">
 
-<div class="card shadow text-center p-3">
+            <div class="card shadow text-center p-3">
 
-<h3>
-✅
-</h3>
+                <h3>👨‍⚕️</h3>
 
-<h4>
-{{ completed }}
-</h4>
+                <h4>{{ doctors }}</h4>
 
-<p>
-Completed
-</p>
+                <p>Available Doctors</p>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
+        <div class="col-md-3 mb-4">
 
+            <div class="card shadow text-center p-3">
 
-<div class="col-md-3">
+                <h3>📋</h3>
 
-<div class="card shadow text-center p-3">
+                <h4>{{ total_records }}</h4>
 
-<h3>
-👨‍⚕️
-</h3>
+                <p>Medical Records</p>
 
-<h4>
-{{ doctors }}
-</h4>
+            </div>
 
-<p>
-Available Doctors
-</p>
+        </div>
 
-</div>
+        <div class="col-md-3 mb-4">
 
-</div>
+            <div class="card shadow text-center p-3">
 
+                <h3>📄</h3>
 
-</div>
+                <h4>{{ total_documents }}</h4>
 
+                <p>Uploaded Documents</p>
 
+            </div>
 
+        </div>
 
-
-<div class="card shadow mt-5">
-
-
-<div class="card-header bg-primary text-white">
-
-<h4>
-Quick Actions
-</h4>
-
-</div>
-
-
-<div class="card-body">
-
-    <a href="{{ url_for('patient.doctors') }}"
-    class="btn btn-success me-2">
-    
-    Book Appointment
-    
-    </a>
-    
-    <a href="{{ url_for('patient.appointments') }}"
-    class="btn btn-info me-2">
-    
-    My Appointments
-    
-    </a>
-    
-    <a href="{{ url_for('patient.medical_records') }}"
-    class="btn btn-warning me-2">
-    
-    Medical Records
-    
-    </a>
-    
-    <a href="{{ url_for('patient.upload_document') }}"
-    class="btn btn-primary">
-    
-    📄 Medical Documents
-    
-    </a>
-    
     </div>
 
+    <!-- Quick Actions -->
+
+    <div class="card shadow mt-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4 class="mb-0">
+                Quick Actions
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <a href="{{ url_for('patient.doctors') }}"
+               class="btn btn-success me-2 mb-2">
+
+                📅 Book Appointment
+
+            </a>
+
+            <a href="{{ url_for('patient.appointments') }}"
+               class="btn btn-info me-2 mb-2">
+
+                📖 My Appointments
+
+            </a>
+
+            <a href="{{ url_for('patient.medical_records') }}"
+               class="btn btn-warning me-2 mb-2">
+
+                🩺 Medical Records
+
+            </a>
+
+            <a href="{{ url_for('patient.upload_document') }}"
+               class="btn btn-primary mb-2">
+
+                📄 Medical Documents
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Upcoming Appointment -->
+
+    {% if upcoming %}
+
+    <div class="card shadow mt-4">
+
+        <div class="card-header bg-warning">
+
+            <h5 class="mb-0">
+
+                📅 Upcoming Appointment
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <h5>
+
+                Dr. {{ upcoming.doctor.full_name }}
+
+            </h5>
+
+            <p>
+
+                <strong>Specialization:</strong>
+
+                {{ upcoming.doctor.specialization }}
+
+            </p>
+
+            <p>
+
+                <strong>Date:</strong>
+
+                {{ upcoming.appointment_date }}
+
+            </p>
+
+            <p>
+
+                <strong>Time:</strong>
+
+                {{ upcoming.appointment_time }}
+
+            </p>
+
+            <span class="badge bg-secondary">
+
+                {{ upcoming.status }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info mt-4">
+
+        No upcoming appointments.
+
+    </div>
+
+    {% endif %}
+
 </div>
-
-
-
-
-
-{% if upcoming %}
-
-
-<div class="card shadow mt-4">
-
-
-<div class="card-header bg-warning">
-
-Upcoming Appointment
-
-</div>
-
-
-
-<div class="card-body">
-
-
-<h5>
-Dr. {{ upcoming.doctor.full_name }}
-</h5>
-
-
-<p>
-Specialization:
-{{ upcoming.doctor.specialization }}
-</p>
-
-
-<p>
-Date:
-{{ upcoming.appointment_date }}
-</p>
-
-
-<p>
-Time:
-{{ upcoming.appointment_time }}
-</p>
-
-
-<span class="badge bg-secondary">
-
-{{ upcoming.status }}
-
-</span>
-
-
-</div>
-
-
-</div>
-
-
-{% endif %}
-
-
-
-</div>
-
 
 {% endblock %}

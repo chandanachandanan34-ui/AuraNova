@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}
+Patient Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>👤 Patient Details</h2>
+
+    <a href="{{ url_for('doctor.appointments') }}"
+       class="btn btn-secondary mb-4">
+        ← Back to Appointments
+    </a>
+
+    <!-- Basic Information -->
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-primary text-white">
+            Basic Information
+        </div>
+
+        <div class="card-body">
+
+            <p><strong>Name:</strong> {{ patient.full_name }}</p>
+
+            <p><strong>Email:</strong> {{ patient.email }}</p>
+
+            <p><strong>Total Appointments:</strong>
+                {{ appointments|length }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Appointment History -->
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-success text-white">
+            Appointment History
+        </div>
+
+        <div class="card-body">
+
+            {% if appointments %}
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Doctor</th>
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for appointment in appointments %}
+
+                    <tr>
+
+                        <td>{{ appointment.appointment_date }}</td>
+
+                        <td>{{ appointment.appointment_time }}</td>
+
+                        <td>
+                            {% if appointment.doctor %}
+                                Dr. {{ appointment.doctor.full_name }}
+                            {% else %}
+                                Not Assigned
+                            {% endif %}
+                        </td>
+
+                        <td>{{ appointment.status }}</td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <p>No appointments found.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- Medical Records -->
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-info text-white">
+            Medical Records
+        </div>
+
+        <div class="card-body">
+
+            {% if medical_records %}
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Diagnosis</th>
+                        <th>Symptoms</th>
+                        <th>Prescription</th>
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for record in medical_records %}
+
+                    <tr>
+
+                        <td>{{ record.diagnosis }}</td>
+
+                        <td>{{ record.symptoms }}</td>
+
+                        <td>{{ record.prescription }}</td>
+
+                        <td>{{ record.created_at.strftime("%d %b %Y") }}</td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <p>No medical records found.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- Uploaded Documents -->
+    <div class="card shadow">
+
+        <div class="card-header bg-secondary text-white">
+            📄 Uploaded Documents
+        </div>
+
+        <div class="card-body">
+
+            {% if documents %}
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Uploaded</th>
+                        <th>Download</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for document in documents %}
+
+                    <tr>
+
+                        <td>{{ document.title }}</td>
+
+                        <td>{{ document.description }}</td>
+
+                        <td>{{ document.uploaded_at.strftime("%d %b %Y") }}</td>
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('patient.download_document', id=document.id) }}"
+                                class="btn btn-primary btn-sm">
+
+                                Download
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <p>No uploaded documents.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
